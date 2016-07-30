@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
         croller = (Croller) findViewById(R.id.croller);
 
         croller.setIndicatorWidth(20);
-        croller.setProgressPrimaryCircleSize(25);
-        croller.setProgressSecondaryCircleSize(10);
+        croller.setIsContinuous(false);
     }
 }
