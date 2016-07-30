@@ -20,18 +20,20 @@ public class Croller extends View {
     private float currdeg, deg = 3, downdeg, prevCurrDeg;
     private boolean isIncreasing, isDecreasing;
 
+    private boolean isContinuous = false;
+
     private int backCircleColor = Color.parseColor("#222222");
     private int mainCircleColor = Color.parseColor("#000000");
     private int indicatorColor = Color.parseColor("#FFA036");
     private int progressPrimaryColor = Color.parseColor("#FFA036");
     private int progressSecondaryColor = Color.parseColor("#111111");
 
-    private int progressPrimaryCircleSize;
-    private int progressSecondaryColorSize;
+    private float progressPrimaryCircleSize = -1;
+    private float progressSecondaryCircleSize = -1;
 
     private int max = 19;
 
-    private float strokeWidth = 7;
+    private float indicatorWidth = 7;
 
     private String label = "Label";
     private int labelSize = 40;
@@ -77,7 +79,7 @@ public class Croller extends View {
         circlePaint2.setStyle(Paint.Style.FILL);
         linePaint = new Paint();
         linePaint.setColor(indicatorColor);
-        linePaint.setStrokeWidth(strokeWidth);
+        linePaint.setStrokeWidth(indicatorWidth);
         angle = "0.0";
     }
 
@@ -89,7 +91,7 @@ public class Croller extends View {
 
         circlePaint.setColor(progressSecondaryColor);
         circlePaint2.setColor(progressPrimaryColor);
-        linePaint.setStrokeWidth(strokeWidth);
+        linePaint.setStrokeWidth(indicatorWidth);
         linePaint.setColor(indicatorColor);
         textPaint.setColor(labelColor);
         textPaint.setTextSize(labelSize);
@@ -104,13 +106,19 @@ public class Croller extends View {
             x = midx + (float) (radius * Math.sin(2 * Math.PI * (1.0 - tmp)));
             y = midy + (float) (radius * Math.cos(2 * Math.PI * (1.0 - tmp)));
             circlePaint.setColor(progressSecondaryColor);
-            canvas.drawCircle(x, y, ((float) radius / 15), circlePaint);
+            if (progressSecondaryCircleSize == -1)
+                canvas.drawCircle(x, y, ((float) radius / 30), circlePaint);
+            else
+                canvas.drawCircle(x, y, progressSecondaryCircleSize, circlePaint);
         }
         for (int i = 3; i <= deg3; i++) {
             float tmp = (float) i / 24;
             x = midx + (float) (radius * Math.sin(2 * Math.PI * (1.0 - tmp)));
             y = midy + (float) (radius * Math.cos(2 * Math.PI * (1.0 - tmp)));
-            canvas.drawCircle(x, y, ((float) radius / 15), circlePaint2);
+            if (progressPrimaryCircleSize == -1)
+                canvas.drawCircle(x, y, ((float) radius / 15), circlePaint2);
+            else
+                canvas.drawCircle(x, y, progressPrimaryCircleSize, circlePaint2);
         }
 
         float tmp2 = (float) deg / 24;
@@ -259,5 +267,37 @@ public class Croller extends View {
 
     public void setLabelColor(int labelColor) {
         this.labelColor = labelColor;
+    }
+
+    public float getIndicatorWidth() {
+        return indicatorWidth;
+    }
+
+    public void setIndicatorWidth(float indicatorWidth) {
+        this.indicatorWidth = indicatorWidth;
+    }
+
+    public boolean isContinuous() {
+        return isContinuous;
+    }
+
+    public void setIsContinuous(boolean isContinuous) {
+        this.isContinuous = isContinuous;
+    }
+
+    public float getProgressPrimaryCircleSize() {
+        return progressPrimaryCircleSize;
+    }
+
+    public void setProgressPrimaryCircleSize(float progressPrimaryCircleSize) {
+        this.progressPrimaryCircleSize = progressPrimaryCircleSize;
+    }
+
+    public float getProgressSecondaryCircleSize() {
+        return progressSecondaryCircleSize;
+    }
+
+    public void setProgressSecondaryCircleSize(float progressSecondaryCircleSize) {
+        this.progressSecondaryCircleSize = progressSecondaryCircleSize;
     }
 }

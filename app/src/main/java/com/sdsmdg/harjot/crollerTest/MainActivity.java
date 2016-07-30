@@ -14,7 +14,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         croller = (Croller) findViewById(R.id.croller);
 
-        croller.setIndicatorColor(Color.BLUE);
-
+        croller.setIndicatorWidth(20);
+        croller.setProgressPrimaryCircleSize(25);
+        croller.setProgressSecondaryCircleSize(10);
     }
 }
