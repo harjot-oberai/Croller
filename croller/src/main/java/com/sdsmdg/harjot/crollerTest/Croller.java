@@ -167,26 +167,6 @@ public class Croller extends View {
             canvas.drawArc(oval, (float) 135, (float) 270, false, circlePaint);
             canvas.drawArc(oval, (float) 135, (float) ((deg3 - 3) * (180 / 12)), false, circlePaint2);
 
-//            for (int i = (int) (deg2); i < 22; i++) {
-//                float tmp = (float) i / 24;
-//                x = midx + (float) (radius * Math.sin(2 * Math.PI * (1.0 - tmp)));
-//                y = midy + (float) (radius * Math.cos(2 * Math.PI * (1.0 - tmp)));
-//                circlePaint.setColor(progressSecondaryColor);
-//                if (progressSecondaryCircleSize == -1)
-//                    canvas.drawCircle(x, y, ((float) radius / 30), circlePaint);
-//                else
-//                    canvas.drawCircle(x, y, progressSecondaryCircleSize, circlePaint);
-//            }
-//            for (int i = 3; i <= deg3; i++) {
-//                float tmp = (float) i / 24;
-//                x = midx + (float) (radius * Math.sin(2 * Math.PI * (1.0 - tmp)));
-//                y = midy + (float) (radius * Math.cos(2 * Math.PI * (1.0 - tmp)));
-//                if (progressPrimaryCircleSize == -1)
-//                    canvas.drawCircle(x, y, ((float) radius / 15), circlePaint2);
-//                else
-//                    canvas.drawCircle(x, y, progressPrimaryCircleSize, circlePaint2);
-//            }
-
             float tmp2 = (float) deg / 24;
             float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
@@ -369,5 +349,21 @@ public class Croller extends View {
 
     public void setProgressSecondaryCircleSize(float progressSecondaryCircleSize) {
         this.progressSecondaryCircleSize = progressSecondaryCircleSize;
+    }
+
+    public float getProgressPrimaryStrokeWidth() {
+        return progressPrimaryStrokeWidth;
+    }
+
+    public void setProgressPrimaryStrokeWidth(float progressPrimaryStrokeWidth) {
+        this.progressPrimaryStrokeWidth = progressPrimaryStrokeWidth;
+    }
+
+    public float getProgressSecondaryStrokeWidth() {
+        return progressSecondaryStrokeWidth;
+    }
+
+    public void setProgressSecondaryStrokeWidth(float progressSecondaryStrokeWidth) {
+        this.progressSecondaryStrokeWidth = progressSecondaryStrokeWidth;
     }
 }

@@ -15,6 +15,5 @@ public class MainActivity extends AppCompatActivity {
         croller = (Croller) findViewById(R.id.croller);
 
         croller.setIndicatorWidth(20);
-        croller.setIsContinuous(false);
     }
 }
