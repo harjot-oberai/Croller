@@ -35,13 +35,16 @@ public class Croller extends View {
     private float progressPrimaryStrokeWidth = 25;
     private float progressSecondaryStrokeWidth = 10;
 
-    private int max = 19;
+    private int max = 100;
 
     private float indicatorWidth = 7;
 
     private String label = "Label";
     private int labelSize = 40;
     private int labelColor = Color.WHITE;
+
+    private int startOffset = 45;
+    private int sweepAngle = -1;
 
     private onProgressChangedListener mListener;
 
@@ -103,32 +106,36 @@ public class Croller extends View {
             textPaint.setColor(labelColor);
             textPaint.setTextSize(labelSize);
 
+            if (sweepAngle == -1) {
+                sweepAngle = 360 - (2 * startOffset);
+            }
+
             int ang = 0;
             float x = 0, y = 0;
             int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
             float deg2 = Math.max(3, deg);
-            float deg3 = Math.min(deg, 21);
-            for (int i = (int) (deg2); i < 22; i++) {
-                float tmp = (float) i / 24;
+            float deg3 = Math.min(deg, max + 2);
+            for (int i = (int) (deg2); i < max + 3; i++) {
+                float tmp = ((float) startOffset / 360) + ((float) sweepAngle / 360) * (float) i / (max + 5);
                 x = midx + (float) (radius * Math.sin(2 * Math.PI * (1.0 - tmp)));
                 y = midy + (float) (radius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 circlePaint.setColor(progressSecondaryColor);
                 if (progressSecondaryCircleSize == -1)
-                    canvas.drawCircle(x, y, ((float) radius / 30), circlePaint);
+                    canvas.drawCircle(x, y, ((float) radius / 30 * ((float) 20 / max)), circlePaint);
                 else
                     canvas.drawCircle(x, y, progressSecondaryCircleSize, circlePaint);
             }
             for (int i = 3; i <= deg3; i++) {
-                float tmp = (float) i / 24;
+                float tmp = ((float) startOffset / 360) + ((float) sweepAngle / 360) * (float) i / (max + 5);
                 x = midx + (float) (radius * Math.sin(2 * Math.PI * (1.0 - tmp)));
                 y = midy + (float) (radius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 if (progressPrimaryCircleSize == -1)
-                    canvas.drawCircle(x, y, ((float) radius / 15), circlePaint2);
+                    canvas.drawCircle(x, y, ((float) radius / 15 * ((float) 20 / max)), circlePaint2);
                 else
                     canvas.drawCircle(x, y, progressPrimaryCircleSize, circlePaint2);
             }
 
-            float tmp2 = (float) deg / 24;
+            float tmp2 = ((float) startOffset / 360) + ((float) sweepAngle / 360) * (float) deg / (max + 5);
             float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
             float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
@@ -143,6 +150,10 @@ public class Croller extends View {
             canvas.drawLine(x1, y1, x2, y2, linePaint);
 
         } else {
+
+            if (sweepAngle == -1) {
+                sweepAngle = 360 - (2 * startOffset);
+            }
 
             circlePaint.setColor(progressSecondaryColor);
             circlePaint.setStrokeWidth(progressSecondaryStrokeWidth);
@@ -159,15 +170,15 @@ public class Croller extends View {
             float x = 0, y = 0;
             int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
             float deg2 = Math.max(3, deg);
-            float deg3 = Math.min(deg, 21);
+            float deg3 = Math.min(deg, max + 2);
 
             RectF oval = new RectF();
             oval.set(midx - radius, midy - radius, midx + radius, midy + radius);
 
-            canvas.drawArc(oval, (float) 135, (float) 270, false, circlePaint);
-            canvas.drawArc(oval, (float) 135, (float) ((deg3 - 3) * (180 / 12)), false, circlePaint2);
+            canvas.drawArc(oval, (float) 90 + startOffset, (float) sweepAngle, false, circlePaint);
+            canvas.drawArc(oval, (float) 90 + startOffset, (float) ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
 
-            float tmp2 = (float) deg / 24;
+            float tmp2 = ((float) startOffset / 360) + (((float) sweepAngle / 360) * ((deg - 2) / (max)));
             float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
             float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
@@ -201,7 +212,7 @@ public class Croller extends View {
             if (downdeg < 0) {
                 downdeg += 360;
             }
-            downdeg = (float) Math.floor(downdeg / 15);
+            downdeg = (float) Math.floor((downdeg / 360) * (max + 5));
             return true;
         }
         if (e.getAction() == MotionEvent.ACTION_MOVE) {
@@ -212,15 +223,15 @@ public class Croller extends View {
             if (currdeg < 0) {
                 currdeg += 360;
             }
-            currdeg = (float) Math.floor(currdeg / 15);
+            currdeg = (float) Math.floor((currdeg / 360) * (max + 5));
 
-            if (currdeg == 0 && downdeg == 23) {
+            if (currdeg == 0 && downdeg == max + 4) {
                 deg++;
-                if (deg > 21) {
-                    deg = 21;
+                if (deg > max + 2) {
+                    deg = max + 2;
                 }
                 downdeg = currdeg;
-            } else if (currdeg == 23 && downdeg == 0) {
+            } else if (currdeg == max + 4 && downdeg == 0) {
                 deg--;
                 if (deg < 3) {
                     deg = 3;
@@ -228,8 +239,8 @@ public class Croller extends View {
                 downdeg = currdeg;
             } else {
                 deg += (currdeg - downdeg);
-                if (deg > 21) {
-                    deg = 21;
+                if (deg > max + 2) {
+                    deg = max + 2;
                 }
                 if (deg < 3) {
                     deg = 3;
@@ -365,5 +376,29 @@ public class Croller extends View {
 
     public void setProgressSecondaryStrokeWidth(float progressSecondaryStrokeWidth) {
         this.progressSecondaryStrokeWidth = progressSecondaryStrokeWidth;
+    }
+
+    public int getSweepAngle() {
+        return sweepAngle;
+    }
+
+    public void setSweepAngle(int sweepAngle) {
+        this.sweepAngle = sweepAngle;
+    }
+
+    public int getStartOffset() {
+        return startOffset;
+    }
+
+    public void setStartOffset(int startOffset) {
+        this.startOffset = startOffset;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
     }
 }

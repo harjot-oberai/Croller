@@ -15,5 +15,9 @@ public class MainActivity extends AppCompatActivity {
         croller = (Croller) findViewById(R.id.croller);
 
         croller.setIndicatorWidth(20);
+        croller.setIsContinuous(true);
+        croller.setMax(100);
+        croller.setStartOffset(180);
+        croller.setSweepAngle(90);
     }
 }
