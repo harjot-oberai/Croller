@@ -140,7 +140,7 @@ public class Croller extends View {
                 y = midy + (float) (progressRadius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 circlePaint.setColor(progressSecondaryColor);
                 if (progressSecondaryCircleSize == -1)
-                    canvas.drawCircle(x, y, ((float) radius / 30 * ((float) 20 / max)), circlePaint);
+                    canvas.drawCircle(x, y, ((float) radius / 30 * ((float) 20 / max) * ((float) sweepAngle / 270)), circlePaint);
                 else
                     canvas.drawCircle(x, y, progressSecondaryCircleSize, circlePaint);
             }
@@ -149,7 +149,7 @@ public class Croller extends View {
                 x = midx + (float) (progressRadius * Math.sin(2 * Math.PI * (1.0 - tmp)));
                 y = midy + (float) (progressRadius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 if (progressPrimaryCircleSize == -1)
-                    canvas.drawCircle(x, y, ((float) progressRadius / 15 * ((float) 20 / max)), circlePaint2);
+                    canvas.drawCircle(x, y, ((float) progressRadius / 15 * ((float) 20 / max) * ((float) sweepAngle / 270)), circlePaint2);
                 else
                     canvas.drawCircle(x, y, progressPrimaryCircleSize, circlePaint2);
             }

@@ -17,14 +17,14 @@ public class MainActivity extends AppCompatActivity {
         croller.setIndicatorWidth(10);
         croller.setBackCircleColor(Color.parseColor("#EDEDED"));
         croller.setMainCircleColor(Color.WHITE);
-        croller.setMax(50);
-        croller.setStartOffset(45);
+        croller.setMax(30);
+        croller.setStartOffset(135);
         croller.setIsContinuous(false);
         croller.setLabelColor(Color.BLACK);
         croller.setProgressPrimaryColor(Color.parseColor("#0B3C49"));
         croller.setIndicatorColor(Color.parseColor("#0B3C49"));
         croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
-        croller.setProgressRadius(380);
-        croller.setBackCircleRadius(300);
+//        croller.setProgressRadius(380);
+//        croller.setBackCircleRadius(300);
     }
 }
