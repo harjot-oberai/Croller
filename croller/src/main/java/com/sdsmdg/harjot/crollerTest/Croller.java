@@ -35,7 +35,11 @@ public class Croller extends View {
     private float progressPrimaryStrokeWidth = 25;
     private float progressSecondaryStrokeWidth = 10;
 
-    private int max = 100;
+    private float mainCircleRadius = -1;
+    private float backCircleRadius = -1;
+    private float progressRadius = -1;
+
+    private int max = 25;
 
     private float indicatorWidth = 7;
 
@@ -43,7 +47,8 @@ public class Croller extends View {
     private int labelSize = 40;
     private int labelColor = Color.WHITE;
 
-    private int startOffset = 45;
+    private int startOffset = 30;
+    private int startOffset2 = 0;
     private int sweepAngle = -1;
 
     private onProgressChangedListener mListener;
@@ -99,6 +104,9 @@ public class Croller extends View {
         midy = canvas.getHeight() / 2;
 
         if (!isContinuous) {
+
+            startOffset2 = startOffset - 15;
+
             circlePaint.setColor(progressSecondaryColor);
             circlePaint2.setColor(progressPrimaryColor);
             linePaint.setStrokeWidth(indicatorWidth);
@@ -106,19 +114,30 @@ public class Croller extends View {
             textPaint.setColor(labelColor);
             textPaint.setTextSize(labelSize);
 
+            int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
+
             if (sweepAngle == -1) {
-                sweepAngle = 360 - (2 * startOffset);
+                sweepAngle = 360 - (2 * startOffset2);
+            }
+
+            if (mainCircleRadius == -1) {
+                mainCircleRadius = radius * ((float) 11 / 15);
+            }
+            if (backCircleRadius == -1) {
+                backCircleRadius = radius * ((float) 13 / 15);
+            }
+            if (progressRadius == -1) {
+                progressRadius = radius;
             }
 
             int ang = 0;
             float x = 0, y = 0;
-            int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
             float deg2 = Math.max(3, deg);
             float deg3 = Math.min(deg, max + 2);
             for (int i = (int) (deg2); i < max + 3; i++) {
-                float tmp = ((float) startOffset / 360) + ((float) sweepAngle / 360) * (float) i / (max + 5);
-                x = midx + (float) (radius * Math.sin(2 * Math.PI * (1.0 - tmp)));
-                y = midy + (float) (radius * Math.cos(2 * Math.PI * (1.0 - tmp)));
+                float tmp = ((float) startOffset2 / 360) + ((float) sweepAngle / 360) * (float) i / (max + 5);
+                x = midx + (float) (progressRadius * Math.sin(2 * Math.PI * (1.0 - tmp)));
+                y = midy + (float) (progressRadius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 circlePaint.setColor(progressSecondaryColor);
                 if (progressSecondaryCircleSize == -1)
                     canvas.drawCircle(x, y, ((float) radius / 30 * ((float) 20 / max)), circlePaint);
@@ -126,33 +145,45 @@ public class Croller extends View {
                     canvas.drawCircle(x, y, progressSecondaryCircleSize, circlePaint);
             }
             for (int i = 3; i <= deg3; i++) {
-                float tmp = ((float) startOffset / 360) + ((float) sweepAngle / 360) * (float) i / (max + 5);
-                x = midx + (float) (radius * Math.sin(2 * Math.PI * (1.0 - tmp)));
-                y = midy + (float) (radius * Math.cos(2 * Math.PI * (1.0 - tmp)));
+                float tmp = ((float) startOffset2 / 360) + ((float) sweepAngle / 360) * (float) i / (max + 5);
+                x = midx + (float) (progressRadius * Math.sin(2 * Math.PI * (1.0 - tmp)));
+                y = midy + (float) (progressRadius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 if (progressPrimaryCircleSize == -1)
-                    canvas.drawCircle(x, y, ((float) radius / 15 * ((float) 20 / max)), circlePaint2);
+                    canvas.drawCircle(x, y, ((float) progressRadius / 15 * ((float) 20 / max)), circlePaint2);
                 else
                     canvas.drawCircle(x, y, progressPrimaryCircleSize, circlePaint2);
             }
 
-            float tmp2 = ((float) startOffset / 360) + ((float) sweepAngle / 360) * (float) deg / (max + 5);
+            float tmp2 = ((float) startOffset2 / 360) + ((float) sweepAngle / 360) * (float) deg / (max + 5);
             float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
             float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y2 = midy + (float) (radius * ((float) 3 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
 
             circlePaint.setColor(backCircleColor);
-            canvas.drawCircle(midx, midy, radius * ((float) 13 / 15), circlePaint);
+            canvas.drawCircle(midx, midy, backCircleRadius, circlePaint);
             circlePaint.setColor(mainCircleColor);
-            canvas.drawCircle(midx, midy, radius * ((float) 11 / 15), circlePaint);
+            canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
             canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
             canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
 
         } else {
 
+            int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
+
             if (sweepAngle == -1) {
                 sweepAngle = 360 - (2 * startOffset);
+            }
+
+            if (mainCircleRadius == -1) {
+                mainCircleRadius = radius * ((float) 11 / 15);
+            }
+            if (backCircleRadius == -1) {
+                backCircleRadius = radius * ((float) 13 / 15);
+            }
+            if (progressRadius == -1) {
+                progressRadius = radius;
             }
 
             circlePaint.setColor(progressSecondaryColor);
@@ -168,12 +199,11 @@ public class Croller extends View {
 
             int ang = 0;
             float x = 0, y = 0;
-            int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
             float deg2 = Math.max(3, deg);
             float deg3 = Math.min(deg, max + 2);
 
             RectF oval = new RectF();
-            oval.set(midx - radius, midy - radius, midx + radius, midy + radius);
+            oval.set(midx - progressRadius, midy - progressRadius, midx + progressRadius, midy + progressRadius);
 
             canvas.drawArc(oval, (float) 90 + startOffset, (float) sweepAngle, false, circlePaint);
             canvas.drawArc(oval, (float) 90 + startOffset, (float) ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
@@ -187,9 +217,9 @@ public class Croller extends View {
             circlePaint.setStyle(Paint.Style.FILL);
 
             circlePaint.setColor(backCircleColor);
-            canvas.drawCircle(midx, midy, radius * ((float) 13 / 15), circlePaint);
+            canvas.drawCircle(midx, midy, backCircleRadius, circlePaint);
             circlePaint.setColor(mainCircleColor);
-            canvas.drawCircle(midx, midy, radius * ((float) 11 / 15), circlePaint);
+            canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
             canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
             canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
@@ -400,5 +430,29 @@ public class Croller extends View {
 
     public void setMax(int max) {
         this.max = max;
+    }
+
+    public float getMainCircleRadius() {
+        return mainCircleRadius;
+    }
+
+    public void setMainCircleRadius(float mainCircleRadius) {
+        this.mainCircleRadius = mainCircleRadius;
+    }
+
+    public float getBackCircleRadius() {
+        return backCircleRadius;
+    }
+
+    public void setBackCircleRadius(float backCircleRadius) {
+        this.backCircleRadius = backCircleRadius;
+    }
+
+    public float getProgressRadius() {
+        return progressRadius;
+    }
+
+    public void setProgressRadius(float progressRadius) {
+        this.progressRadius = progressRadius;
     }
 }

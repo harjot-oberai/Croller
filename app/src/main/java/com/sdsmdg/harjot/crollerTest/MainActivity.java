@@ -14,10 +14,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         croller = (Croller) findViewById(R.id.croller);
 
-        croller.setIndicatorWidth(20);
-        croller.setIsContinuous(true);
-        croller.setMax(100);
-        croller.setStartOffset(180);
-        croller.setSweepAngle(90);
+        croller.setIndicatorWidth(10);
+        croller.setBackCircleColor(Color.parseColor("#EDEDED"));
+        croller.setMainCircleColor(Color.WHITE);
+        croller.setMax(50);
+        croller.setStartOffset(45);
+        croller.setIsContinuous(false);
+        croller.setLabelColor(Color.BLACK);
+        croller.setProgressPrimaryColor(Color.parseColor("#0B3C49"));
+        croller.setIndicatorColor(Color.parseColor("#0B3C49"));
+        croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
+        croller.setProgressRadius(380);
+        croller.setBackCircleRadius(300);
     }
 }
