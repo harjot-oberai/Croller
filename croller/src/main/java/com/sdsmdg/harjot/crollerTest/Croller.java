@@ -17,8 +17,7 @@ public class Croller extends View {
     private static float width, height;
     private float midx, midy;
     private Paint textPaint, circlePaint, circlePaint2, linePaint;
-    private String angle;
-    private float currdeg, deg = 3, downdeg, prevCurrDeg;
+    private float currdeg = 0, deg = 3, downdeg = 0, prevCurrDeg;
     private boolean isIncreasing, isDecreasing;
 
     private boolean isContinuous = false;
@@ -76,7 +75,7 @@ public class Croller extends View {
         init();
     }
 
-    void init() {
+    private void init() {
         textPaint = new Paint();
         textPaint.setColor(labelColor);
         textPaint.setStyle(Paint.Style.FILL);
@@ -94,7 +93,6 @@ public class Croller extends View {
         linePaint = new Paint();
         linePaint.setColor(indicatorColor);
         linePaint.setStrokeWidth(indicatorWidth);
-        angle = "0.0";
     }
 
     @Override
@@ -165,7 +163,8 @@ public class Croller extends View {
             circlePaint.setColor(mainCircleColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
             canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
-            canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
+//            canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
+            canvas.drawText(String.valueOf(downdeg) + ":" + String.valueOf(currdeg), midx, midy, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
 
         } else {
@@ -221,7 +220,8 @@ public class Croller extends View {
             circlePaint.setColor(mainCircleColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
             canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
-            canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
+//            canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
+            canvas.drawText(String.valueOf(downdeg) + ":" + String.valueOf(currdeg), midx, midy, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
         }
 
@@ -255,16 +255,16 @@ public class Croller extends View {
             }
             currdeg = (float) Math.floor((currdeg / 360) * (max + 5));
 
-            if (currdeg == 0 && downdeg == max + 4) {
-                deg++;
-                if (deg > max + 2) {
-                    deg = max + 2;
-                }
-                downdeg = currdeg;
-            } else if (currdeg == max + 4 && downdeg == 0) {
+            if ((currdeg / (max + 4)) > 0.75f && ((downdeg - 0) / (max + 4)) < 0.25f) {
                 deg--;
                 if (deg < 3) {
                     deg = 3;
+                }
+                downdeg = currdeg;
+            } else if ((downdeg / (max + 4)) > 0.75f && ((currdeg - 0) / (max + 4)) < 0.25f) {
+                deg++;
+                if (deg > max + 2) {
+                    deg = max + 2;
                 }
                 downdeg = currdeg;
             } else {
@@ -278,9 +278,9 @@ public class Croller extends View {
                 downdeg = currdeg;
             }
 
-            angle = String.valueOf(String.valueOf(deg));
             invalidate();
             return true;
+
         }
         if (e.getAction() == MotionEvent.ACTION_UP) {
             return true;
