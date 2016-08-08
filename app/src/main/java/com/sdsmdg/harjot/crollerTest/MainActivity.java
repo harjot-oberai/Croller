@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
         croller.setIndicatorWidth(10);
         croller.setBackCircleColor(Color.parseColor("#EDEDED"));
         croller.setMainCircleColor(Color.WHITE);
-        croller.setMax(30);
-//        croller.setStartOffset(45);
-        croller.setIsContinuous(false);
+        croller.setMax(1000);
+        croller.setStartOffset(45);
+        croller.setIsContinuous(true);
         croller.setLabelColor(Color.BLACK);
         croller.setProgressPrimaryColor(Color.parseColor("#0B3C49"));
         croller.setIndicatorColor(Color.parseColor("#0B3C49"));
