@@ -52,6 +52,16 @@ Croller croller = (Croller) findViewById(R.id.croller);
         croller.setIndicatorColor(Color.parseColor("#0B3C49"));
         croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
 ```
+### progressChangedListener
+```
+Croller croller = (Croller) findViewById(R.id.croller);
+        croller.setOnProgressChangedListener(new Croller.onProgressChangedListener() {
+            @Override
+            public void onProgressChanged(int progress) {
+                // use the progress
+            }
+        });
+```
 
 # Attributes
 XML Attribute | Java set method | Functionality
