@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Croller">
+        <attr name="progress" format="integer" />
+        <attr name="label" format="string" />
+        <attr name="back_circle_color" format="color" />
+        <attr name="main_circle_color" format="color" />
+        <attr name="indicator_color" format="color" />
+        <attr name="progress_primary_color" format="color" />
+        <attr name="progress_secondary_color" format="color" />
+        <attr name="label_size" format="integer" />
+        <attr name="label_color" format="color" />
+        <attr name="indicator_width" format="float" />
+        <attr name="is_continuous" format="boolean" />
+        <attr name="progress_primary_circle_size" format="float" />
+        <attr name="progress_secondary_circle_size" format="float" />
+        <attr name="progress_primary_stroke_width" format="float" />
+        <attr name="progress_secondary_stroke_width" format="float" />
+        <attr name="sweep_angle" format="integer" />
+        <attr name="start_offset" format="integer" />
+        <attr name="max" format="integer" />
+        <attr name="main_circle_radius" format="float" />
+        <attr name="back_circle_radius" format="float" />
+        <attr name="progress_radius" format="float" />
+    </declare-styleable>
+</resources>

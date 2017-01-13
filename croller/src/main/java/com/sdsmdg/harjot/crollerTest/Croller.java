@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.crollerTest;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,16 +10,16 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.sdsmdg.harjot.croller.R;
+
 /**
  * Created by Harjot on 30-Jul-16.
  */
 public class Croller extends View {
 
-    private static float width, height;
     private float midx, midy;
     private Paint textPaint, circlePaint, circlePaint2, linePaint;
-    private float currdeg = 0, deg = 3, downdeg = 0, prevCurrDeg;
-    private boolean isIncreasing, isDecreasing;
+    private float currdeg = 0, deg = 3, downdeg = 0;
 
     private boolean isContinuous = false;
 
@@ -50,6 +51,8 @@ public class Croller extends View {
     private int startOffset2 = 0;
     private int sweepAngle = -1;
 
+    RectF oval;
+
     private onProgressChangedListener mListener;
 
     public interface onProgressChangedListener {
@@ -67,11 +70,13 @@ public class Croller extends View {
 
     public Croller(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initXMLAttrs(context, attrs);
         init();
     }
 
     public Croller(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initXMLAttrs(context, attrs);
         init();
     }
 
@@ -93,6 +98,61 @@ public class Croller extends View {
         linePaint = new Paint();
         linePaint.setColor(indicatorColor);
         linePaint.setStrokeWidth(indicatorWidth);
+
+        oval = new RectF();
+
+    }
+
+    private void initXMLAttrs(Context context, AttributeSet attrs) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Croller);
+        final int N = a.getIndexCount();
+        for (int i = 0; i < N; ++i) {
+            int attr = a.getIndex(i);
+            if (attr == R.styleable.Croller_progress) {
+                setProgress(a.getInt(attr, 1));
+            } else if (attr == R.styleable.Croller_label) {
+                setLabel(a.getString(attr));
+            } else if (attr == R.styleable.Croller_back_circle_color) {
+                setBackCircleColor(a.getColor(attr, Color.parseColor("#222222")));
+            } else if (attr == R.styleable.Croller_main_circle_color) {
+                setMainCircleColor(a.getColor(attr, Color.parseColor("#000000")));
+            } else if (attr == R.styleable.Croller_indicator_color) {
+                setIndicatorColor(a.getColor(attr, Color.parseColor("#FFA036")));
+            } else if (attr == R.styleable.Croller_progress_primary_color) {
+                setProgressPrimaryColor(a.getColor(attr, Color.parseColor("#FFA036")));
+            } else if (attr == R.styleable.Croller_progress_secondary_color) {
+                setProgressSecondaryColor(a.getColor(attr, Color.parseColor("#111111")));
+            } else if (attr == R.styleable.Croller_label_size) {
+                setLabelSize(a.getInteger(attr, 40));
+            } else if (attr == R.styleable.Croller_label_color) {
+                setLabelColor(a.getColor(attr, Color.WHITE));
+            } else if (attr == R.styleable.Croller_indicator_width) {
+                setIndicatorWidth(a.getFloat(attr, 7));
+            } else if (attr == R.styleable.Croller_is_continuous) {
+                setIsContinuous(a.getBoolean(attr, false));
+            } else if (attr == R.styleable.Croller_progress_primary_circle_size) {
+                setProgressPrimaryCircleSize(a.getFloat(attr, -1));
+            } else if (attr == R.styleable.Croller_progress_secondary_circle_size) {
+                setProgressSecondaryCircleSize(a.getFloat(attr, -1));
+            } else if (attr == R.styleable.Croller_progress_primary_stroke_width) {
+                setProgressPrimaryStrokeWidth(a.getFloat(attr, 25));
+            } else if (attr == R.styleable.Croller_progress_secondary_stroke_width) {
+                setProgressSecondaryStrokeWidth(a.getFloat(attr, 10));
+            } else if (attr == R.styleable.Croller_sweep_angle) {
+                setSweepAngle(a.getInt(attr, -1));
+            } else if (attr == R.styleable.Croller_start_offset) {
+                setStartOffset(a.getInt(attr, 30));
+            } else if (attr == R.styleable.Croller_max) {
+                setMax(a.getInt(attr, 25));
+            } else if (attr == R.styleable.Croller_main_circle_radius) {
+                setMainCircleRadius(a.getFloat(attr, -1));
+            } else if (attr == R.styleable.Croller_back_circle_radius) {
+                setBackCircleRadius(a.getFloat(attr, -1));
+            } else if (attr == R.styleable.Croller_progress_radius) {
+                setProgressRadius(a.getFloat(attr, -1));
+            }
+        }
+        a.recycle();
     }
 
     @Override
@@ -128,8 +188,7 @@ public class Croller extends View {
                 progressRadius = radius;
             }
 
-            int ang = 0;
-            float x = 0, y = 0;
+            float x, y;
             float deg2 = Math.max(3, deg);
             float deg3 = Math.min(deg, max + 2);
             for (int i = (int) (deg2); i < max + 3; i++) {
@@ -147,12 +206,12 @@ public class Croller extends View {
                 x = midx + (float) (progressRadius * Math.sin(2 * Math.PI * (1.0 - tmp)));
                 y = midy + (float) (progressRadius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 if (progressPrimaryCircleSize == -1)
-                    canvas.drawCircle(x, y, ((float) progressRadius / 15 * ((float) 20 / max) * ((float) sweepAngle / 270)), circlePaint2);
+                    canvas.drawCircle(x, y, (progressRadius / 15 * ((float) 20 / max) * ((float) sweepAngle / 270)), circlePaint2);
                 else
                     canvas.drawCircle(x, y, progressPrimaryCircleSize, circlePaint2);
             }
 
-            float tmp2 = ((float) startOffset2 / 360) + ((float) sweepAngle / 360) * (float) deg / (max + 5);
+            float tmp2 = ((float) startOffset2 / 360) + ((float) sweepAngle / 360) * deg / (max + 5);
             float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
             float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
@@ -195,16 +254,12 @@ public class Croller extends View {
             textPaint.setColor(labelColor);
             textPaint.setTextSize(labelSize);
 
-            int ang = 0;
-            float x = 0, y = 0;
-            float deg2 = Math.max(3, deg);
             float deg3 = Math.min(deg, max + 2);
 
-            RectF oval = new RectF();
             oval.set(midx - progressRadius, midy - progressRadius, midx + progressRadius, midy + progressRadius);
 
             canvas.drawArc(oval, (float) 90 + startOffset, (float) sweepAngle, false, circlePaint);
-            canvas.drawArc(oval, (float) 90 + startOffset, (float) ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
+            canvas.drawArc(oval, (float) 90 + startOffset, ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
 
             float tmp2 = ((float) startOffset / 360) + (((float) sweepAngle / 360) * ((deg - 2) / (max)));
             float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
@@ -222,7 +277,6 @@ public class Croller extends View {
             canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
         }
-
 
     }
 

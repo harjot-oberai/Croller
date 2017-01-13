@@ -12,18 +12,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        croller = (Croller) findViewById(R.id.croller);
+//        croller = (Croller) findViewById(R.id.croller);
 
-        croller.setIndicatorWidth(10);
-        croller.setBackCircleColor(Color.parseColor("#EDEDED"));
-        croller.setMainCircleColor(Color.WHITE);
-        croller.setMax(1000);
-        croller.setStartOffset(45);
-        croller.setIsContinuous(true);
-        croller.setLabelColor(Color.BLACK);
-        croller.setProgressPrimaryColor(Color.parseColor("#0B3C49"));
-        croller.setIndicatorColor(Color.parseColor("#0B3C49"));
-        croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
+//        croller.setIndicatorWidth(10);
+//        croller.setBackCircleColor(Color.parseColor("#EDEDED"));
+//        croller.setMainCircleColor(Color.WHITE);
+//        croller.setMax(50);
+//        croller.setStartOffset(45);
+//        croller.setIsContinuous(false);
+//        croller.setLabelColor(Color.BLACK);
+//        croller.setProgressPrimaryColor(Color.parseColor("#0B3C49"));
+//        croller.setIndicatorColor(Color.parseColor("#0B3C49"));
+//        croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
 //        croller.setProgressRadius(380);
 //        croller.setBackCircleRadius(300);
     }
