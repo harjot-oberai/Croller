@@ -13,14 +13,14 @@ allprojects {
       repositories {
           jcenter()
           maven{
-              url 'https://dl.bintray.com/sdsmdg/Croller/'
+              url 'https://dl.bintray.com/harjot-oberai/Croller/'
           }
      }
 }
 ```
 ### build.gradle of App
 ```
-compile 'com.sdsmdg.harjot:croller:1.0.0'
+compile 'com.sdsmdg.harjot:croller:1.0.1'
 ```
 
 ## in XML
