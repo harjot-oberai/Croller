@@ -6,21 +6,11 @@
 #### A circular seekbar for Android, with a control knob! (for the lack of a better  word).
 
 # Usage
-The library is currently not uploaded to jCenter, so to use it, follow these steps
-### build.gradle of Project
+Just add the following dependency in your app's `build.gradle`
 ```
-allprojects {
-      repositories {
-          jcenter()
-          maven{
-              url 'https://dl.bintray.com/harjot-oberai/Croller/'
-          }
-     }
+dependencies {
+      compile 'com.sdsmdg.harjot:croller:1.0.1'
 }
-```
-### build.gradle of App
-```
-compile 'com.sdsmdg.harjot:croller:1.0.1'
 ```
 
 ## in XML
