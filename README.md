@@ -10,7 +10,7 @@
 Just add the following dependency in your app's `build.gradle`
 ```
 dependencies {
-      compile 'com.sdsmdg.harjot:croller:1.0.1'
+      compile 'com.sdsmdg.harjot:croller:1.0.2'
 }
 ```
 
