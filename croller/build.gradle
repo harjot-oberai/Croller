@@ -8,12 +8,12 @@ ext {
     libraryName = 'Croller'
     artifact = 'croller'
 
-    libraryDescription = 'A wrapper for Facebook Native Like Button (LikeView) on Android'
+    libraryDescription = 'A circular seekbar for Android, with a control knob! (for the lack of a better word).'
 
-    siteUrl = 'https://github.com/nuuneoi/FBLikeAndroid'
-    gitUrl = 'https://github.com/nuuneoi/FBLikeAndroid.git'
+    siteUrl = 'https://github.com/harjot-oberai/Croller'
+    gitUrl = 'https://github.com/harjot-oberai/Croller.git'
 
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.2'
 
     developerId = 'harjot-oberai'
     developerName = 'Harjot Singh Oberai'
