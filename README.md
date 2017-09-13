@@ -8,14 +8,14 @@
 
 # Usage
 Just add the following dependency in your app's `build.gradle`
-```
+```groovy
 dependencies {
       compile 'com.sdsmdg.harjot:croller:1.0.2'
 }
 ```
 
 ## in XML
-```
+```xml
 <com.sdsmdg.harjot.crollerTest.Croller
         android:id="@+id/croller"
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@ dependencies {
 ```
 
 ## in Java
-```
+```java
 Croller croller = (Croller) findViewById(R.id.croller);
         croller.setIndicatorWidth(10);
         croller.setBackCircleColor(Color.parseColor("#EDEDED"));
@@ -48,7 +48,7 @@ Croller croller = (Croller) findViewById(R.id.croller);
         croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
 ```
 ### progressChangedListener
-```
+```java
 Croller croller = (Croller) findViewById(R.id.croller);
         croller.setOnProgressChangedListener(new Croller.onProgressChangedListener() {
             @Override
