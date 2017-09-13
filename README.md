@@ -88,3 +88,5 @@ back_circle_color | setBackCircleColor(int color) | Set the back circle color
 <img src = "https://github.com/harjot-oberai/Croller/blob/master/gifs/Croller2.gif" ><br>
 <img src = "https://github.com/harjot-oberai/Croller/blob/master/gifs/Croller3.gif" >
 
+# License
+<b>Croller</b> is licensed under `MIT license`. View [license](LICENSE.md).
