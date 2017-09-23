@@ -12,9 +12,6 @@ import android.view.View;
 
 import com.sdsmdg.harjot.croller.R;
 
-/**
- * Created by Harjot on 30-Jul-16.
- */
 public class Croller extends View {
 
     private float midx, midy;
@@ -82,20 +79,27 @@ public class Croller extends View {
 
     private void init() {
         textPaint = new Paint();
+        textPaint.setAntiAlias(true);
         textPaint.setColor(labelColor);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextSize(labelSize);
         textPaint.setFakeBoldText(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
+
         circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
         circlePaint.setColor(progressSecondaryColor);
         circlePaint.setStrokeWidth(progressSecondaryStrokeWidth);
         circlePaint.setStyle(Paint.Style.FILL);
+
         circlePaint2 = new Paint();
+        circlePaint2.setAntiAlias(true);
         circlePaint2.setColor(progressPrimaryColor);
         circlePaint2.setStrokeWidth(progressPrimaryStrokeWidth);
         circlePaint2.setStyle(Paint.Style.FILL);
+
         linePaint = new Paint();
+        linePaint.setAntiAlias(true);
         linePaint.setColor(indicatorColor);
         linePaint.setStrokeWidth(indicatorWidth);
 
