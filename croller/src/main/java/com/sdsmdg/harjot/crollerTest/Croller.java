@@ -160,6 +160,46 @@ public class Croller extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int minWidth = 100;
+        int minHeight = 100;
+
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int width;
+        int height;
+
+        if (widthMode == MeasureSpec.EXACTLY) {
+            width = widthSize;
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            width = Math.min(minWidth, widthSize);
+        } else {
+            // If width is wrap_content i.e. MeasureSpec.UNSPECIFIED, then make width equal to height
+            width = heightSize;
+        }
+
+        if (heightMode == MeasureSpec.EXACTLY) {
+            height = heightSize;
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            height = Math.min(minHeight, heightSize);
+        } else {
+            // If height is wrap_content i.e. MeasureSpec.UNSPECIFIED, then make height equal to width
+            height = widthSize;
+        }
+
+        if (widthMode == MeasureSpec.UNSPECIFIED && heightMode == MeasureSpec.UNSPECIFIED) {
+            width = minWidth;
+            height = minHeight;
+        }
+
+        setMeasuredDimension(width, height);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
@@ -230,7 +270,7 @@ public class Croller extends View {
             circlePaint.setColor(mainCircleColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
             canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
-//            canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
+            canvas.drawText(String.valueOf(getProgress()), midx, midy, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
 
         } else {
@@ -290,6 +330,10 @@ public class Croller extends View {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 
+        if (getDistance(e.getX(), e.getY(), midx, midy) > Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))) {
+            return super.onTouchEvent(e);
+        }
+
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
             float dx = e.getX() - midx;
             float dy = e.getY() - midy;
@@ -342,6 +386,18 @@ public class Croller extends View {
             return true;
         }
         return super.onTouchEvent(e);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (getParent() != null && event.getAction() == MotionEvent.ACTION_DOWN) {
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
+    public float getDistance(float x1, float y1, float x2, float y2) {
+        return (float) Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
     public int getProgress() {
@@ -532,4 +588,5 @@ public class Croller extends View {
         this.progressRadius = progressRadius;
         invalidate();
     }
+
 }
