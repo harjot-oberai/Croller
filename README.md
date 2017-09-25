@@ -1,10 +1,4 @@
-# Croller
-<img src = "https://github.com/harjot-oberai/Croller/blob/master/screens/screen2.jpg" width = "150">
-<img src = "https://github.com/harjot-oberai/Croller/blob/master/screens/screen1.jpg" width = "150">
-<img src = "https://github.com/harjot-oberai/Croller/blob/master/screens/screen3.jpg" width = "150">
-<img src = "https://github.com/harjot-oberai/Croller/blob/master/screens/screen4.jpg" width = "150"><br>
-
-#### A circular seekbar for Android, with a control knob! (for the lack of a better  word).
+<img src = "/screens/croller_cover.png"><br>
 
 # Usage
 Just add the following dependency in your app's `build.gradle`
