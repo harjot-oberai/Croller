@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.sdsmdg.harjot.croller.R;
+import com.sdsmdg.harjot.crollerTest.utilities.Utils;
 
 public class Croller extends View {
 
@@ -162,8 +163,8 @@ public class Croller extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int minWidth = 100;
-        int minHeight = 100;
+        int minWidth = (int) Utils.convertDpToPixel(160, getContext());
+        int minHeight = (int) Utils.convertDpToPixel(160, getContext());
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -178,6 +179,7 @@ public class Croller extends View {
         } else if (widthMode == MeasureSpec.AT_MOST) {
             width = Math.min(minWidth, widthSize);
         } else {
+            // only in case of ScrollViews, otherwise MeasureSpec.UNSPECIFIED is never triggered
             // If width is wrap_content i.e. MeasureSpec.UNSPECIFIED, then make width equal to height
             width = heightSize;
         }
@@ -187,6 +189,7 @@ public class Croller extends View {
         } else if (heightMode == MeasureSpec.AT_MOST) {
             height = Math.min(minHeight, heightSize);
         } else {
+            // only in case of ScrollViews, otherwise MeasureSpec.UNSPECIFIED is never triggered
             // If height is wrap_content i.e. MeasureSpec.UNSPECIFIED, then make height equal to width
             height = widthSize;
         }
@@ -330,7 +333,7 @@ public class Croller extends View {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
 
-        if (getDistance(e.getX(), e.getY(), midx, midy) > Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))) {
+        if (Utils.getDistance(e.getX(), e.getY(), midx, midy) > Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))) {
             return super.onTouchEvent(e);
         }
 
@@ -394,10 +397,6 @@ public class Croller extends View {
             getParent().requestDisallowInterceptTouchEvent(true);
         }
         return super.dispatchTouchEvent(event);
-    }
-
-    public float getDistance(float x1, float y1, float x2, float y2) {
-        return (float) Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
     public int getProgress() {
