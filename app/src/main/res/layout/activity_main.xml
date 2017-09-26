@@ -15,12 +15,13 @@
         app:back_circle_color="#EDEDED"
         app:indicator_color="#0B3C49"
         app:indicator_width="10"
-        app:is_continuous="true"
+        app:is_continuous="false"
+        app:label="Label"
         app:label_color="#000000"
         app:main_circle_color="#FFFFFF"
-        app:max="1000"
+        app:max="50"
         app:progress_primary_color="#0B3C49"
-        app:progress_secondary_color="#EEEEEE"
+        app:progress_secondary_color="#EDEDED"
         app:start_offset="45" />
 
 </RelativeLayout>

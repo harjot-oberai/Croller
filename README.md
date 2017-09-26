@@ -8,7 +8,7 @@ dependencies {
 }
 ```
 
-## in XML
+### XML
 ```xml
 <com.sdsmdg.harjot.crollerTest.Croller
         android:id="@+id/croller"
@@ -27,7 +27,7 @@ dependencies {
         app:start_offset="45" />
 ```
 
-## in Java
+### Java
 ```java
 Croller croller = (Croller) findViewById(R.id.croller);
         croller.setIndicatorWidth(10);
@@ -41,7 +41,7 @@ Croller croller = (Croller) findViewById(R.id.croller);
         croller.setIndicatorColor(Color.parseColor("#0B3C49"));
         croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
 ```
-### progressChangedListener
+### Progress Change Listener
 ```java
 Croller croller = (Croller) findViewById(R.id.croller);
         croller.setOnProgressChangedListener(new Croller.onProgressChangedListener() {
@@ -53,6 +53,9 @@ Croller croller = (Croller) findViewById(R.id.croller);
 ```
 
 # Attributes
+
+<img src = "/screens/croller_attributes.png"><br>
+
 XML Attribute | Java set method | Functionality
 ------------ | ------------- | ------------- 
 progress | setProgress(int progress) | Set the current progress of the seekbar
@@ -77,10 +80,18 @@ back_circle_radius | setBackCircleRadius(float radius) | Set the back circle rad
 main_circle_color | setMainCircleColor(int color) | Set the main(front) circle color
 back_circle_color | setBackCircleColor(int color) | Set the back circle color
 
-# In Action
-<img src = "https://github.com/harjot-oberai/Croller/blob/master/gifs/Croller1.gif" ><br>
-<img src = "https://github.com/harjot-oberai/Croller/blob/master/gifs/Croller2.gif" ><br>
-<img src = "https://github.com/harjot-oberai/Croller/blob/master/gifs/Croller3.gif" >
+# Examples
+<img src = "/screens/croller_example.png">
+
+### ```is_continuous = false```
+<p align="center">
+	<img src = "/gifs/croller_1.gif" height="300">
+</p>
+
+### ```is_continuous = true```
+<p align="center">
+	<img src = "/gifs/croller_2.gif" height="300">
+</p>
 
 # License
 <b>Croller</b> is licensed under `MIT license`. View [license](LICENSE.md).
