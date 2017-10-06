@@ -7,7 +7,7 @@
 Just add the following dependency in your app's `build.gradle`
 ```groovy
 dependencies {
-      compile 'com.sdsmdg.harjot:croller:1.0.5'
+      compile 'com.sdsmdg.harjot:croller:1.0.6'
 }
 ```
 
@@ -44,7 +44,9 @@ Croller croller = (Croller) findViewById(R.id.croller);
         croller.setIndicatorColor(Color.parseColor("#0B3C49"));
         croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
 ```
-### Progress Change Listener
+### Listeners
+
+#### Progress Change Listener (if you only want to use the progress)
 ```java
 Croller croller = (Croller) findViewById(R.id.croller);
         croller.setOnProgressChangedListener(new Croller.onProgressChangedListener() {
@@ -55,12 +57,33 @@ Croller croller = (Croller) findViewById(R.id.croller);
         });
 ```
 
+#### Croller Change Listener (if want start and stop tracking as well, similar to seekbar)
+```java
+Croller croller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
+            @Override
+            public void onProgressChanged(Croller croller, int progress) {
+            	// use the progress
+            }
+
+            @Override
+            public void onStartTrackingTouch(Croller croller) {
+                // tracking started
+            }
+
+            @Override
+            public void onStopTrackingTouch(Croller croller) {
+            	// tracking stopped
+            }
+        });
+```
+
 # Attributes
 
 <img src = "/screens/croller_attributes.png"><br>
 
 XML Attribute | Java set method | Functionality
 ------------ | ------------- | ------------- 
+anticlockwise | setAntiClockwise(boolean anticlockwise) | Set the direction of rotation
 progress | setProgress(int progress) | Set the current progress of the seekbar
 label | setLabel(String str) | Set the label
 label_size | setLabelSize(int size) | Set the label size
