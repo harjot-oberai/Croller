@@ -51,16 +51,23 @@ public class Croller extends View {
 
     private boolean isAntiClockwise = false;
 
+    private boolean startEventSent = false;
+
     RectF oval;
 
-    private onProgressChangedListener mListener;
+    private onProgressChangedListener mProgressChangeListener;
+    private OnCrollerChangeListener mCrollerChangeListener;
 
     public interface onProgressChangedListener {
         void onProgressChanged(int progress);
     }
 
-    public void setOnProgressChangedListener(onProgressChangedListener listener) {
-        mListener = listener;
+    public void setOnProgressChangedListener(onProgressChangedListener mProgressChangeListener) {
+        this.mProgressChangeListener = mProgressChangeListener;
+    }
+
+    public void setOnCrollerChangeListener(OnCrollerChangeListener mCrollerChangeListener) {
+        this.mCrollerChangeListener = mCrollerChangeListener;
     }
 
     public Croller(Context context) {
@@ -210,8 +217,11 @@ public class Croller extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mListener != null)
-            mListener.onProgressChanged((int) (deg - 2));
+        if (mProgressChangeListener != null)
+            mProgressChangeListener.onProgressChanged((int) (deg - 2));
+
+        if (mCrollerChangeListener != null)
+            mCrollerChangeListener.onProgressChanged(this, (int) (deg - 2));
 
         midx = canvas.getWidth() / 2;
         midy = canvas.getHeight() / 2;
@@ -328,8 +338,8 @@ public class Croller extends View {
             oval.set(midx - progressRadius, midy - progressRadius, midx + progressRadius, midy + progressRadius);
 
             canvas.drawArc(oval, (float) 90 + startOffset, (float) sweepAngle, false, circlePaint);
-            if(isAntiClockwise) {
-                canvas.drawArc(oval, (float) 90 - startOffset, -1* ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
+            if (isAntiClockwise) {
+                canvas.drawArc(oval, (float) 90 - startOffset, -1 * ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
             } else {
                 canvas.drawArc(oval, (float) 90 + startOffset, ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
             }
@@ -360,6 +370,10 @@ public class Croller extends View {
     public boolean onTouchEvent(MotionEvent e) {
 
         if (Utils.getDistance(e.getX(), e.getY(), midx, midy) > Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))) {
+            if (startEventSent && mCrollerChangeListener != null) {
+                mCrollerChangeListener.onStopTrackingTouch(this);
+                startEventSent = false;
+            }
             return super.onTouchEvent(e);
         }
 
@@ -372,6 +386,12 @@ public class Croller extends View {
                 downdeg += 360;
             }
             downdeg = (float) Math.floor((downdeg / 360) * (max + 5));
+
+            if (mCrollerChangeListener != null) {
+                mCrollerChangeListener.onStartTrackingTouch(this);
+                startEventSent = true;
+            }
+
             return true;
         }
         if (e.getAction() == MotionEvent.ACTION_MOVE) {
@@ -429,6 +449,10 @@ public class Croller extends View {
 
         }
         if (e.getAction() == MotionEvent.ACTION_UP) {
+            if (mCrollerChangeListener != null) {
+                mCrollerChangeListener.onStopTrackingTouch(this);
+                startEventSent = false;
+            }
             return true;
         }
         return super.onTouchEvent(e);
