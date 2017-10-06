@@ -49,6 +49,8 @@ public class Croller extends View {
     private int startOffset2 = 0;
     private int sweepAngle = -1;
 
+    private boolean isAntiClockwise = false;
+
     RectF oval;
 
     private onProgressChangedListener mListener;
@@ -155,6 +157,8 @@ public class Croller extends View {
                 setBackCircleRadius(a.getFloat(attr, -1));
             } else if (attr == R.styleable.Croller_progress_radius) {
                 setProgressRadius(a.getFloat(attr, -1));
+            } else if (attr == R.styleable.Croller_anticlockwise) {
+                setAntiClockwise(a.getBoolean(attr, false));
             }
         }
         a.recycle();
@@ -244,6 +248,11 @@ public class Croller extends View {
             float deg3 = Math.min(deg, max + 2);
             for (int i = (int) (deg2); i < max + 3; i++) {
                 float tmp = ((float) startOffset2 / 360) + ((float) sweepAngle / 360) * (float) i / (max + 5);
+
+                if (isAntiClockwise) {
+                    tmp = 1.0f - tmp;
+                }
+
                 x = midx + (float) (progressRadius * Math.sin(2 * Math.PI * (1.0 - tmp)));
                 y = midy + (float) (progressRadius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 circlePaint.setColor(progressSecondaryColor);
@@ -254,6 +263,11 @@ public class Croller extends View {
             }
             for (int i = 3; i <= deg3; i++) {
                 float tmp = ((float) startOffset2 / 360) + ((float) sweepAngle / 360) * (float) i / (max + 5);
+
+                if (isAntiClockwise) {
+                    tmp = 1.0f - tmp;
+                }
+
                 x = midx + (float) (progressRadius * Math.sin(2 * Math.PI * (1.0 - tmp)));
                 y = midy + (float) (progressRadius * Math.cos(2 * Math.PI * (1.0 - tmp)));
                 if (progressPrimaryCircleSize == -1)
@@ -263,6 +277,11 @@ public class Croller extends View {
             }
 
             float tmp2 = ((float) startOffset2 / 360) + ((float) sweepAngle / 360) * deg / (max + 5);
+
+            if (isAntiClockwise) {
+                tmp2 = 1.0f - tmp2;
+            }
+
             float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
             float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
@@ -309,9 +328,18 @@ public class Croller extends View {
             oval.set(midx - progressRadius, midy - progressRadius, midx + progressRadius, midy + progressRadius);
 
             canvas.drawArc(oval, (float) 90 + startOffset, (float) sweepAngle, false, circlePaint);
-            canvas.drawArc(oval, (float) 90 + startOffset, ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
+            if(isAntiClockwise) {
+                canvas.drawArc(oval, (float) 90 - startOffset, -1* ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
+            } else {
+                canvas.drawArc(oval, (float) 90 + startOffset, ((deg3 - 2) * ((float) sweepAngle / max)), false, circlePaint2);
+            }
 
             float tmp2 = ((float) startOffset / 360) + (((float) sweepAngle / 360) * ((deg - 2) / (max)));
+
+            if (isAntiClockwise) {
+                tmp2 = 1.0f - tmp2;
+            }
+
             float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
             float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
@@ -357,27 +385,44 @@ public class Croller extends View {
             currdeg = (float) Math.floor((currdeg / 360) * (max + 5));
 
             if ((currdeg / (max + 4)) > 0.75f && ((downdeg - 0) / (max + 4)) < 0.25f) {
-                deg--;
-                if (deg < 3) {
-                    deg = 3;
+                if (isAntiClockwise) {
+                    deg++;
+                    if (deg > max + 2) {
+                        deg = max + 2;
+                    }
+                } else {
+                    deg--;
+                    if (deg < 3) {
+                        deg = 3;
+                    }
                 }
-                downdeg = currdeg;
             } else if ((downdeg / (max + 4)) > 0.75f && ((currdeg - 0) / (max + 4)) < 0.25f) {
-                deg++;
-                if (deg > max + 2) {
-                    deg = max + 2;
+                if (isAntiClockwise) {
+                    deg--;
+                    if (deg < 3) {
+                        deg = 3;
+                    }
+                } else {
+                    deg++;
+                    if (deg > max + 2) {
+                        deg = max + 2;
+                    }
                 }
-                downdeg = currdeg;
             } else {
-                deg += (currdeg - downdeg);
+                if (isAntiClockwise) {
+                    deg -= (currdeg - downdeg);
+                } else {
+                    deg += (currdeg - downdeg);
+                }
                 if (deg > max + 2) {
                     deg = max + 2;
                 }
                 if (deg < 3) {
                     deg = 3;
                 }
-                downdeg = currdeg;
             }
+
+            downdeg = currdeg;
 
             invalidate();
             return true;
@@ -586,4 +631,12 @@ public class Croller extends View {
         invalidate();
     }
 
+    public boolean isAntiClockwise() {
+        return isAntiClockwise;
+    }
+
+    public void setAntiClockwise(boolean antiClockwise) {
+        isAntiClockwise = antiClockwise;
+        invalidate();
+    }
 }
