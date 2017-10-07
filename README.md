@@ -7,7 +7,7 @@
 Just add the following dependency in your app's `build.gradle`
 ```groovy
 dependencies {
-      compile 'com.sdsmdg.harjot:croller:1.0.6'
+      compile 'com.sdsmdg.harjot:croller:1.0.7'
 }
 ```
 
@@ -90,6 +90,7 @@ label_size | setLabelSize(int size) | Set the label size
 label_color | setLabelColor(int color) | Set the label color
 is_continuous | setIsContinuous(boolean bool) | Set whether seekbar is conitnuous or discrete
 max | setMax(int max) | Set the maximum value of the seekbar
+min | setMin(int min) | Set the minimum value of the seekbar (Default is **1**)
 start_offset | setStartOffset(int offset) | Set the seekbar start offset angle from bottom horizontal center
 sweep_angle | setSweepAngle(int angle) | Set the total angle covered by the seekbar
 progress_primary_stroke_width | setProgressPrimaryStrokeWidth(float width) | Set the primary progress thickness for continuous type
