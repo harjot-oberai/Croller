@@ -38,6 +38,7 @@ public class Croller extends View {
     private float progressRadius = -1;
 
     private int max = 25;
+    private int min = 1;
 
     private float indicatorWidth = 7;
 
@@ -158,6 +159,9 @@ public class Croller extends View {
                 setStartOffset(a.getInt(attr, 30));
             } else if (attr == R.styleable.Croller_max) {
                 setMax(a.getInt(attr, 25));
+            } else if (attr == R.styleable.Croller_min) {
+                setMin(a.getInt(attr, 1));
+                deg = min + 2;
             } else if (attr == R.styleable.Croller_main_circle_radius) {
                 setMainCircleRadius(a.getFloat(attr, -1));
             } else if (attr == R.styleable.Croller_back_circle_radius) {
@@ -412,15 +416,15 @@ public class Croller extends View {
                     }
                 } else {
                     deg--;
-                    if (deg < 3) {
-                        deg = 3;
+                    if (deg < (min + 2)) {
+                        deg = (min + 2);
                     }
                 }
             } else if ((downdeg / (max + 4)) > 0.75f && ((currdeg - 0) / (max + 4)) < 0.25f) {
                 if (isAntiClockwise) {
                     deg--;
-                    if (deg < 3) {
-                        deg = 3;
+                    if (deg < (min + 2)) {
+                        deg = (min + 2);
                     }
                 } else {
                     deg++;
@@ -437,8 +441,8 @@ public class Croller extends View {
                 if (deg > max + 2) {
                     deg = max + 2;
                 }
-                if (deg < 3) {
-                    deg = 3;
+                if (deg < (min + 2)) {
+                    deg = (min + 2);
                 }
             }
 
@@ -624,7 +628,26 @@ public class Croller extends View {
     }
 
     public void setMax(int max) {
-        this.max = max;
+        if (max < min) {
+            this.max = min;
+        } else {
+            this.max = max;
+        }
+        invalidate();
+    }
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        if (min < 0) {
+            this.min = 0;
+        } else if (min > max) {
+            this.min = max;
+        } else {
+            this.min = min;
+        }
         invalidate();
     }
 

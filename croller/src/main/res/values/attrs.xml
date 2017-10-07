@@ -19,6 +19,7 @@
         <attr name="sweep_angle" format="integer" />
         <attr name="start_offset" format="integer" />
         <attr name="max" format="integer" />
+        <attr name="min" format="integer" />
         <attr name="main_circle_radius" format="float" />
         <attr name="back_circle_radius" format="float" />
         <attr name="progress_radius" format="float" />
