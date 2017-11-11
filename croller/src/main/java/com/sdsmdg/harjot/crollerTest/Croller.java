@@ -27,6 +27,12 @@ public class Croller extends View {
     private int progressPrimaryColor = Color.parseColor("#FFA036");
     private int progressSecondaryColor = Color.parseColor("#111111");
 
+    private int backCircleDisabledColor = Color.parseColor("#82222222");
+    private int mainCircleDisabledColor = Color.parseColor("#82000000");
+    private int indicatorDisabledColor = Color.parseColor("#82FFA036");
+    private int progressPrimaryDisabledColor = Color.parseColor("#82FFA036");
+    private int progressSecondaryDisabledColor = Color.parseColor("#82111111");
+
     private float progressPrimaryCircleSize = -1;
     private float progressSecondaryCircleSize = -1;
 
@@ -49,6 +55,8 @@ public class Croller extends View {
     private int startOffset = 30;
     private int startOffset2 = 0;
     private int sweepAngle = -1;
+
+    private boolean isEnabled = true;
 
     private boolean isAntiClockwise = false;
 
@@ -99,19 +107,25 @@ public class Croller extends View {
 
         circlePaint = new Paint();
         circlePaint.setAntiAlias(true);
-        circlePaint.setColor(progressSecondaryColor);
         circlePaint.setStrokeWidth(progressSecondaryStrokeWidth);
         circlePaint.setStyle(Paint.Style.FILL);
 
         circlePaint2 = new Paint();
         circlePaint2.setAntiAlias(true);
-        circlePaint2.setColor(progressPrimaryColor);
         circlePaint2.setStrokeWidth(progressPrimaryStrokeWidth);
         circlePaint2.setStyle(Paint.Style.FILL);
 
         linePaint = new Paint();
         linePaint.setAntiAlias(true);
-        linePaint.setColor(indicatorColor);
+        if (isEnabled) {
+            circlePaint2.setColor(progressPrimaryColor);
+            circlePaint.setColor(progressSecondaryColor);
+            linePaint.setColor(indicatorColor);
+        } else {
+            circlePaint2.setColor(progressPrimaryDisabledColor);
+            circlePaint.setColor(progressSecondaryDisabledColor);
+            linePaint.setColor(indicatorDisabledColor);
+        }
         linePaint.setStrokeWidth(indicatorWidth);
 
         oval = new RectF();
@@ -121,57 +135,39 @@ public class Croller extends View {
     private void initXMLAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Croller);
         final int N = a.getIndexCount();
-        for (int i = 0; i < N; ++i) {
-            int attr = a.getIndex(i);
-            if (attr == R.styleable.Croller_progress) {
-                setProgress(a.getInt(attr, 1));
-            } else if (attr == R.styleable.Croller_label) {
-                setLabel(a.getString(attr));
-            } else if (attr == R.styleable.Croller_back_circle_color) {
-                setBackCircleColor(a.getColor(attr, Color.parseColor("#222222")));
-            } else if (attr == R.styleable.Croller_main_circle_color) {
-                setMainCircleColor(a.getColor(attr, Color.parseColor("#000000")));
-            } else if (attr == R.styleable.Croller_indicator_color) {
-                setIndicatorColor(a.getColor(attr, Color.parseColor("#FFA036")));
-            } else if (attr == R.styleable.Croller_progress_primary_color) {
-                setProgressPrimaryColor(a.getColor(attr, Color.parseColor("#FFA036")));
-            } else if (attr == R.styleable.Croller_progress_secondary_color) {
-                setProgressSecondaryColor(a.getColor(attr, Color.parseColor("#111111")));
-            } else if (attr == R.styleable.Croller_label_size) {
-                setLabelSize(a.getInteger(attr, 40));
-            } else if (attr == R.styleable.Croller_label_color) {
-                setLabelColor(a.getColor(attr, Color.WHITE));
-            } else if (attr == R.styleable.Croller_indicator_width) {
-                setIndicatorWidth(a.getFloat(attr, 7));
-            } else if (attr == R.styleable.Croller_is_continuous) {
-                setIsContinuous(a.getBoolean(attr, false));
-            } else if (attr == R.styleable.Croller_progress_primary_circle_size) {
-                setProgressPrimaryCircleSize(a.getFloat(attr, -1));
-            } else if (attr == R.styleable.Croller_progress_secondary_circle_size) {
-                setProgressSecondaryCircleSize(a.getFloat(attr, -1));
-            } else if (attr == R.styleable.Croller_progress_primary_stroke_width) {
-                setProgressPrimaryStrokeWidth(a.getFloat(attr, 25));
-            } else if (attr == R.styleable.Croller_progress_secondary_stroke_width) {
-                setProgressSecondaryStrokeWidth(a.getFloat(attr, 10));
-            } else if (attr == R.styleable.Croller_sweep_angle) {
-                setSweepAngle(a.getInt(attr, -1));
-            } else if (attr == R.styleable.Croller_start_offset) {
-                setStartOffset(a.getInt(attr, 30));
-            } else if (attr == R.styleable.Croller_max) {
-                setMax(a.getInt(attr, 25));
-            } else if (attr == R.styleable.Croller_min) {
-                setMin(a.getInt(attr, 1));
-                deg = min + 2;
-            } else if (attr == R.styleable.Croller_main_circle_radius) {
-                setMainCircleRadius(a.getFloat(attr, -1));
-            } else if (attr == R.styleable.Croller_back_circle_radius) {
-                setBackCircleRadius(a.getFloat(attr, -1));
-            } else if (attr == R.styleable.Croller_progress_radius) {
-                setProgressRadius(a.getFloat(attr, -1));
-            } else if (attr == R.styleable.Croller_anticlockwise) {
-                setAntiClockwise(a.getBoolean(attr, false));
-            }
+
+        this.isEnabled = a.getBoolean(R.styleable.Croller_enabled, true);
+        setProgress(a.getInt(R.styleable.Croller_progress, 1));
+        setLabel(a.getString(R.styleable.Croller_label));
+        if (isEnabled) {
+            setBackCircleColor(a.getColor(R.styleable.Croller_back_circle_color, Color.parseColor("#222222")));
+            setMainCircleColor(a.getColor(R.styleable.Croller_main_circle_color, Color.parseColor("#000000")));
+            setIndicatorColor(a.getColor(R.styleable.Croller_indicator_color, Color.parseColor("#FFA036")));
+            setProgressPrimaryColor(a.getColor(R.styleable.Croller_progress_primary_color, Color.parseColor("#FFA036")));
+            setProgressSecondaryColor(a.getColor(R.styleable.Croller_progress_secondary_color, Color.parseColor("#111111")));
+        } else {
+            setBackCircleColor(a.getColor(R.styleable.Croller_back_circle_disable_color, Color.parseColor("#82222222")));
+            setMainCircleColor(a.getColor(R.styleable.Croller_main_circle_disable_color, Color.parseColor("#82000000")));
+            setIndicatorColor(a.getColor(R.styleable.Croller_indicator_disable_color, Color.parseColor("#82FFA036")));
+            setProgressPrimaryColor(a.getColor(R.styleable.Croller_progress_primary_disable_color, Color.parseColor("#82FFA036")));
+            setProgressSecondaryColor(a.getColor(R.styleable.Croller_progress_secondary_disable_color, Color.parseColor("#82111111")));
         }
+        setLabelSize(a.getInteger(R.styleable.Croller_label_size, 40));
+        setLabelColor(a.getColor(R.styleable.Croller_label_color, Color.WHITE));
+        setIndicatorWidth(a.getFloat(R.styleable.Croller_indicator_width, 7));
+        setIsContinuous(a.getBoolean(R.styleable.Croller_is_continuous, false));
+        setProgressPrimaryCircleSize(a.getFloat(R.styleable.Croller_progress_primary_circle_size, -1));
+        setProgressSecondaryCircleSize(a.getFloat(R.styleable.Croller_progress_secondary_circle_size, -1));
+        setProgressPrimaryStrokeWidth(a.getFloat(R.styleable.Croller_progress_primary_stroke_width, 25));
+        setProgressSecondaryStrokeWidth(a.getFloat(R.styleable.Croller_progress_secondary_stroke_width, 10));
+        setSweepAngle(a.getInt(R.styleable.Croller_sweep_angle, -1));
+        setStartOffset(a.getInt(R.styleable.Croller_start_offset, 30));
+        setMax(a.getInt(R.styleable.Croller_max, 25));
+        setMin(a.getInt(R.styleable.Croller_min, 1));
+        deg = min + 2;
+        setBackCircleRadius(a.getFloat(R.styleable.Croller_back_circle_radius, -1));
+        setProgressRadius(a.getFloat(R.styleable.Croller_progress_radius, -1));
+        setAntiClockwise(a.getBoolean(R.styleable.Croller_anticlockwise, false));
         a.recycle();
     }
 
@@ -234,12 +230,18 @@ public class Croller extends View {
 
             startOffset2 = startOffset - 15;
 
-            circlePaint.setColor(progressSecondaryColor);
-            circlePaint2.setColor(progressPrimaryColor);
             linePaint.setStrokeWidth(indicatorWidth);
-            linePaint.setColor(indicatorColor);
             textPaint.setColor(labelColor);
             textPaint.setTextSize(labelSize);
+            if (isEnabled) {
+                circlePaint2.setColor(progressPrimaryColor);
+                circlePaint.setColor(progressSecondaryColor);
+                linePaint.setColor(indicatorColor);
+            } else {
+                circlePaint2.setColor(progressPrimaryDisabledColor);
+                circlePaint.setColor(progressSecondaryDisabledColor);
+                linePaint.setColor(indicatorDisabledColor);
+            }
 
             int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
 
@@ -301,9 +303,15 @@ public class Croller extends View {
             float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
             float y2 = midy + (float) (radius * ((float) 3 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
 
-            circlePaint.setColor(backCircleColor);
+            if (isEnabled)
+                circlePaint.setColor(backCircleColor);
+            else
+                circlePaint.setColor(backCircleDisabledColor);
             canvas.drawCircle(midx, midy, backCircleRadius, circlePaint);
-            circlePaint.setColor(mainCircleColor);
+            if (isEnabled)
+                circlePaint.setColor(mainCircleColor);
+            else
+                circlePaint.setColor(mainCircleDisabledColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
             canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
@@ -326,16 +334,22 @@ public class Croller extends View {
                 progressRadius = radius;
             }
 
-            circlePaint.setColor(progressSecondaryColor);
             circlePaint.setStrokeWidth(progressSecondaryStrokeWidth);
             circlePaint.setStyle(Paint.Style.STROKE);
-            circlePaint2.setColor(progressPrimaryColor);
             circlePaint2.setStrokeWidth(progressPrimaryStrokeWidth);
             circlePaint2.setStyle(Paint.Style.STROKE);
             linePaint.setStrokeWidth(indicatorWidth);
-            linePaint.setColor(indicatorColor);
             textPaint.setColor(labelColor);
             textPaint.setTextSize(labelSize);
+            if (isEnabled) {
+                circlePaint2.setColor(progressPrimaryColor);
+                circlePaint.setColor(progressSecondaryColor);
+                linePaint.setColor(indicatorColor);
+            } else {
+                circlePaint2.setColor(progressPrimaryDisabledColor);
+                circlePaint.setColor(progressSecondaryDisabledColor);
+                linePaint.setColor(indicatorDisabledColor);
+            }
 
             float deg3 = Math.min(deg, max + 2);
 
@@ -361,9 +375,15 @@ public class Croller extends View {
 
             circlePaint.setStyle(Paint.Style.FILL);
 
-            circlePaint.setColor(backCircleColor);
+            if (isEnabled)
+                circlePaint.setColor(backCircleColor);
+            else
+                circlePaint.setColor(backCircleDisabledColor);
             canvas.drawCircle(midx, midy, backCircleRadius, circlePaint);
-            circlePaint.setColor(mainCircleColor);
+            if (isEnabled)
+                circlePaint.setColor(mainCircleColor);
+            else
+                circlePaint.setColor(mainCircleDisabledColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
             canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
@@ -372,6 +392,9 @@ public class Croller extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+
+        if (!isEnabled)
+            return false;
 
         if (Utils.getDistance(e.getX(), e.getY(), midx, midy) > Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))) {
             if (startEventSent && mCrollerChangeListener != null) {
@@ -468,6 +491,15 @@ public class Croller extends View {
             getParent().requestDisallowInterceptTouchEvent(true);
         }
         return super.dispatchTouchEvent(event);
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.isEnabled = enabled;
+        invalidate();
     }
 
     public int getProgress() {

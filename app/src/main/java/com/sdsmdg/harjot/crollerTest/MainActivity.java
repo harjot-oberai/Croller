@@ -2,18 +2,25 @@ package com.sdsmdg.harjot.crollerTest;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    Croller croller;
+    private Croller croller;
+    private SwitchCompat enableSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        croller = (Croller) findViewById(R.id.croller);
+        croller = findViewById(R.id.croller);
+        enableSwitch = findViewById(R.id.enableSwitch);
+
+        enableSwitch.setChecked(true);
+
 //        croller.setIndicatorWidth(10);
 //        croller.setBackCircleColor(Color.parseColor("#EDEDED"));
 //        croller.setMainCircleColor(Color.WHITE);
@@ -41,6 +48,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(Croller croller) {
                 Toast.makeText(MainActivity.this, "Stop", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        enableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    croller.setEnabled(true);
+                else
+                    croller.setEnabled(false);
             }
         });
     }
