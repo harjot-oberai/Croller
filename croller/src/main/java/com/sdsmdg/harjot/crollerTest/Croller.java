@@ -405,6 +405,9 @@ public class Croller extends View {
         }
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            if (mCrollerChangeListener != null) {
+                mCrollerChangeListener.onTap(this);
+            }
             float dx = e.getX() - midx;
             float dy = e.getY() - midy;
             downdeg = (float) ((Math.atan2(dy, dx) * 180) / Math.PI);
