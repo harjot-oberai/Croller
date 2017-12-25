@@ -41,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onTap(final Croller croller) {
+
+            }
+
+            @Override
             public void onStartTrackingTouch(Croller croller) {
                 Toast.makeText(MainActivity.this, "Start", Toast.LENGTH_SHORT).show();
             }

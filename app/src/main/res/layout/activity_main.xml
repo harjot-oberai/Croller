@@ -19,6 +19,8 @@
         app:is_continuous="false"
         app:label="Label"
         app:label_color="#000000"
+        app:label_style="bold"
+        app:label_font="fonts/sans_bold.ttf"
         app:main_circle_color="#FFFFFF"
         app:max="50"
         app:progress_primary_color="#0B3C49"

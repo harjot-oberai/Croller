@@ -1,11 +1,13 @@
 package com.sdsmdg.harjot.crollerTest;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +51,8 @@ public class Croller extends View {
     private float indicatorWidth = 7;
 
     private String label = "Label";
+    private String labelFont = "Arial";
+    private int labelStyle = 0;
     private int labelSize = 40;
     private int labelColor = Color.WHITE;
 
@@ -97,6 +101,7 @@ public class Croller extends View {
     }
 
     private void init() {
+
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
         textPaint.setColor(labelColor);
@@ -104,6 +109,31 @@ public class Croller extends View {
         textPaint.setTextSize(labelSize);
         textPaint.setFakeBoldText(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
+
+        Typeface plainLabel = Typeface.DEFAULT;
+        if(getLabelFont() != null && !getLabelFont().isEmpty()) {
+            AssetManager assetMgr = getContext().getAssets();
+            plainLabel = Typeface.createFromAsset(assetMgr, getLabelFont());
+        }
+        Typeface boldLabel = Typeface.create(plainLabel, Typeface.BOLD);
+        Typeface italicLabel = Typeface.create(plainLabel, Typeface.ITALIC);
+        Typeface boldItalicLabel = Typeface.create(plainLabel, Typeface.BOLD_ITALIC);
+
+        switch (getLabelStyle()) {
+            case 0:
+                textPaint.setTypeface(plainLabel);
+                break;
+            case 1:
+                textPaint.setTypeface(boldLabel);
+                break;
+            case 2:
+                textPaint.setTypeface(italicLabel);
+                break;
+            case 3:
+                textPaint.setTypeface(boldItalicLabel);
+                break;
+
+        }
 
         circlePaint = new Paint();
         circlePaint.setAntiAlias(true);
@@ -136,7 +166,7 @@ public class Croller extends View {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Croller);
         final int N = a.getIndexCount();
 
-        this.isEnabled = a.getBoolean(R.styleable.Croller_enabled, true);
+        setEnabled(a.getBoolean(R.styleable.Croller_enabled, true));
         setProgress(a.getInt(R.styleable.Croller_progress, 1));
         setLabel(a.getString(R.styleable.Croller_label));
         if (isEnabled) {
@@ -154,6 +184,8 @@ public class Croller extends View {
         }
         setLabelSize(a.getInteger(R.styleable.Croller_label_size, 40));
         setLabelColor(a.getColor(R.styleable.Croller_label_color, Color.WHITE));
+        setLabelFont(a.getString(R.styleable.Croller_label_font));
+        setLabelStyle(a.getInt(R.styleable.Croller_label_style, 0));
         setIndicatorWidth(a.getFloat(R.styleable.Croller_indicator_width, 7));
         setIsContinuous(a.getBoolean(R.styleable.Croller_is_continuous, false));
         setProgressPrimaryCircleSize(a.getFloat(R.styleable.Croller_progress_primary_circle_size, -1));
@@ -583,6 +615,24 @@ public class Croller extends View {
 
     public void setLabelColor(int labelColor) {
         this.labelColor = labelColor;
+        invalidate();
+    }
+
+    public String getLabelFont() {
+        return labelFont;
+    }
+
+    public void setLabelFont(String labelFont) {
+        this.labelFont = labelFont;
+        invalidate();
+    }
+
+    public int getLabelStyle() {
+        return labelStyle;
+    }
+
+    public void setLabelStyle(int labelStyle) {
+        this.labelStyle = labelStyle;
         invalidate();
     }
 

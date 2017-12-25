@@ -7,7 +7,7 @@
 Just add the following dependency in your app's `build.gradle`
 ```groovy
 dependencies {
-      compile 'com.sdsmdg.harjot:croller:1.0.7'
+      compile 'com.broy98:Croller:master-SNAPSHOT'
 }
 ```
 
