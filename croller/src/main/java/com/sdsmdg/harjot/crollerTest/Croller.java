@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -53,7 +54,7 @@ public class Croller extends View {
     private String label = "Label";
     private String labelFont = "Arial";
     private int labelStyle = 0;
-    private int labelSize = 40;
+    private float labelSize = 14;
     private int labelColor = Color.WHITE;
 
     private int startOffset = 30;
@@ -106,9 +107,12 @@ public class Croller extends View {
         textPaint.setAntiAlias(true);
         textPaint.setColor(labelColor);
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(labelSize);
         textPaint.setFakeBoldText(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
+
+        int labelPixel = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                labelSize, getResources().getDisplayMetrics());
+        textPaint.setTextSize(labelPixel);
 
         Typeface plainLabel = Typeface.DEFAULT;
         if(getLabelFont() != null && !getLabelFont().isEmpty()) {
@@ -164,7 +168,6 @@ public class Croller extends View {
 
     private void initXMLAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Croller);
-        final int N = a.getIndexCount();
 
         setEnabled(a.getBoolean(R.styleable.Croller_enabled, true));
         setProgress(a.getInt(R.styleable.Croller_progress, 1));
@@ -182,7 +185,8 @@ public class Croller extends View {
             setProgressPrimaryColor(a.getColor(R.styleable.Croller_progress_primary_disable_color, Color.parseColor("#82FFA036")));
             setProgressSecondaryColor(a.getColor(R.styleable.Croller_progress_secondary_disable_color, Color.parseColor("#82111111")));
         }
-        setLabelSize(a.getInteger(R.styleable.Croller_label_size, 40));
+        setLabelSize(a.getDimension(R.styleable.Croller_label_size, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                labelSize, getResources().getDisplayMetrics())));
         setLabelColor(a.getColor(R.styleable.Croller_label_color, Color.WHITE));
         setLabelFont(a.getString(R.styleable.Croller_label_font));
         setLabelStyle(a.getInt(R.styleable.Croller_label_style, 0));
@@ -600,11 +604,11 @@ public class Croller extends View {
         invalidate();
     }
 
-    public int getLabelSize() {
+    public float getLabelSize() {
         return labelSize;
     }
 
-    public void setLabelSize(int labelSize) {
+    public void setLabelSize(float labelSize) {
         this.labelSize = labelSize;
         invalidate();
     }
