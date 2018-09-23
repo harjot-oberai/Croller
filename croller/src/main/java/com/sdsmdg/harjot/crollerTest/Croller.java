@@ -218,6 +218,14 @@ public class Croller extends View {
     }
 
     @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+
+        midx = getWidth() / 2;
+        midy = getHeight() / 2;
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
@@ -226,9 +234,6 @@ public class Croller extends View {
 
         if (mCrollerChangeListener != null)
             mCrollerChangeListener.onProgressChanged(this, (int) (deg - 2));
-
-        midx = canvas.getWidth() / 2;
-        midy = canvas.getHeight() / 2;
 
         if (!isContinuous) {
 
