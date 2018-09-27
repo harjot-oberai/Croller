@@ -310,7 +310,7 @@ public class Croller extends View {
             canvas.drawCircle(midx, midy, backCircleRadius, circlePaint);
             circlePaint.setColor(mainCircleColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
-            canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
+            canvas.drawText(label, midx, midy + (float) (radius * 1.1)-textPaint.getFontMetrics().descent, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
 
         } else {
@@ -370,7 +370,7 @@ public class Croller extends View {
             canvas.drawCircle(midx, midy, backCircleRadius, circlePaint);
             circlePaint.setColor(mainCircleColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
-            canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
+            canvas.drawText(label, midx, midy + (float) (radius * 1.1)-textPaint.getFontMetrics().descent, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
         }
     }
