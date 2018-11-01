@@ -84,7 +84,7 @@ Croller croller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
 XML Attribute | Java set method | Functionality
 ------------ | ------------- | ------------- 
 anticlockwise | setAntiClockwise(boolean anticlockwise) | Set the direction of rotation
-progress | setProgress(int progress) | Set the current progress of the seekbar
+start_progress | setProgress(int progress) | Set the current progress of the seekbar
 label | setLabel(String str) | Set the label
 label_size | setLabelSize(int size) | Set the label size
 label_color | setLabelColor(int color) | Set the label color
