@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="Croller">
-        <attr name="progress" format="integer" />
+        <attr name="start_progress" format="integer" />
         <attr name="label" format="string" />
         <attr name="back_circle_color" format="color" />
         <attr name="main_circle_color" format="color" />

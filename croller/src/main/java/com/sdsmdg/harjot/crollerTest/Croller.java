@@ -123,7 +123,7 @@ public class Croller extends View {
         final int N = a.getIndexCount();
         for (int i = 0; i < N; ++i) {
             int attr = a.getIndex(i);
-            if (attr == R.styleable.Croller_progress) {
+            if (attr == R.styleable.Croller_start_progress) {
                 setProgress(a.getInt(attr, 1));
             } else if (attr == R.styleable.Croller_label) {
                 setLabel(a.getString(attr));
