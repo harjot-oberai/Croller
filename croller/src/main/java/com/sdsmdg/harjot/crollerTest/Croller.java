@@ -173,7 +173,7 @@ public class Croller extends View {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Croller);
 
         setEnabled(a.getBoolean(R.styleable.Croller_enabled, true));
-        setProgress(a.getInt(R.styleable.Croller_progress, 1));
+        setProgress(a.getInt(R.styleable.Croller_start_progress, 1));
         setLabel(a.getString(R.styleable.Croller_label));
 
         setBackCircleColor(a.getColor(R.styleable.Croller_back_circle_color, backCircleColor));

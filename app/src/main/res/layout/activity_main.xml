@@ -9,7 +9,7 @@
 
     <com.sdsmdg.harjot.crollerTest.Croller
         android:id="@+id/croller"
-        app:enabled="true"
+        app:enabled="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
