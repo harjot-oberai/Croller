@@ -9,6 +9,7 @@
 
     <com.sdsmdg.harjot.crollerTest.Croller
         android:id="@+id/croller"
+        app:enabled="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
@@ -18,10 +19,23 @@
         app:is_continuous="false"
         app:label="Label"
         app:label_color="#000000"
+        app:label_disabled_color="#8DFAA091"
+        app:label_style="italic"
+        app:label_font="fonts/Pattaya-Regular.ttf"
+        app:label_size="25dp"
         app:main_circle_color="#FFFFFF"
         app:max="50"
         app:progress_primary_color="#0B3C49"
         app:progress_secondary_color="#EDEDED"
         app:start_offset="45" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/enableSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="49dp"
+        android:text="Enable " />
 
 </RelativeLayout>
