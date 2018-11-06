@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.sdsmdg.harjot.crollerTest.utilities.Utils;
 
 public class Croller extends View {
 
+    private static final String TAG = "point";
     private float midx, midy;
     private Paint textPaint, circlePaint, circlePaint2, linePaint;
     private float currdeg = 0, deg = 3, downdeg = 0;
@@ -56,6 +58,8 @@ public class Croller extends View {
     private int labelStyle = 0;
     private float labelSize = 14;
     private int labelColor = Color.WHITE;
+
+    private int labelDisabledColor = Color.BLACK;
 
     private int startOffset = 30;
     private int startOffset2 = 0;
@@ -105,17 +109,47 @@ public class Croller extends View {
 
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
-        textPaint.setColor(labelColor);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setFakeBoldText(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
 
-        int labelPixel = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                labelSize, getResources().getDisplayMetrics());
-        textPaint.setTextSize(labelPixel);
+        Log.i(TAG, "init: "+labelSize);
+        textPaint.setTextSize(labelSize);
 
+        generateTypeface();
+
+        circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
+        circlePaint.setStrokeWidth(progressSecondaryStrokeWidth);
+        circlePaint.setStyle(Paint.Style.FILL);
+
+        circlePaint2 = new Paint();
+        circlePaint2.setAntiAlias(true);
+        circlePaint2.setStrokeWidth(progressPrimaryStrokeWidth);
+        circlePaint2.setStyle(Paint.Style.FILL);
+
+        linePaint = new Paint();
+        linePaint.setAntiAlias(true);
+        if (isEnabled) {
+            circlePaint2.setColor(progressPrimaryColor);
+            circlePaint.setColor(progressSecondaryColor);
+            linePaint.setColor(indicatorColor);
+            textPaint.setColor(labelColor);
+        } else {
+            circlePaint2.setColor(progressPrimaryDisabledColor);
+            circlePaint.setColor(progressSecondaryDisabledColor);
+            linePaint.setColor(indicatorDisabledColor);
+            textPaint.setColor(labelDisabledColor);
+        }
+        linePaint.setStrokeWidth(indicatorWidth);
+
+        oval = new RectF();
+
+    }
+
+    private void generateTypeface() {
         Typeface plainLabel = Typeface.DEFAULT;
-        if(getLabelFont() != null && !getLabelFont().isEmpty()) {
+        if (getLabelFont() != null && !getLabelFont().isEmpty()) {
             AssetManager assetMgr = getContext().getAssets();
             plainLabel = Typeface.createFromAsset(assetMgr, getLabelFont());
         }
@@ -139,31 +173,6 @@ public class Croller extends View {
 
         }
 
-        circlePaint = new Paint();
-        circlePaint.setAntiAlias(true);
-        circlePaint.setStrokeWidth(progressSecondaryStrokeWidth);
-        circlePaint.setStyle(Paint.Style.FILL);
-
-        circlePaint2 = new Paint();
-        circlePaint2.setAntiAlias(true);
-        circlePaint2.setStrokeWidth(progressPrimaryStrokeWidth);
-        circlePaint2.setStyle(Paint.Style.FILL);
-
-        linePaint = new Paint();
-        linePaint.setAntiAlias(true);
-        if (isEnabled) {
-            circlePaint2.setColor(progressPrimaryColor);
-            circlePaint.setColor(progressSecondaryColor);
-            linePaint.setColor(indicatorColor);
-        } else {
-            circlePaint2.setColor(progressPrimaryDisabledColor);
-            circlePaint.setColor(progressSecondaryDisabledColor);
-            linePaint.setColor(indicatorDisabledColor);
-        }
-        linePaint.setStrokeWidth(indicatorWidth);
-
-        oval = new RectF();
-
     }
 
     private void initXMLAttrs(Context context, AttributeSet attrs) {
@@ -172,22 +181,23 @@ public class Croller extends View {
         setEnabled(a.getBoolean(R.styleable.Croller_enabled, true));
         setProgress(a.getInt(R.styleable.Croller_progress, 1));
         setLabel(a.getString(R.styleable.Croller_label));
-        if (isEnabled) {
-            setBackCircleColor(a.getColor(R.styleable.Croller_back_circle_color, Color.parseColor("#222222")));
-            setMainCircleColor(a.getColor(R.styleable.Croller_main_circle_color, Color.parseColor("#000000")));
-            setIndicatorColor(a.getColor(R.styleable.Croller_indicator_color, Color.parseColor("#FFA036")));
-            setProgressPrimaryColor(a.getColor(R.styleable.Croller_progress_primary_color, Color.parseColor("#FFA036")));
-            setProgressSecondaryColor(a.getColor(R.styleable.Croller_progress_secondary_color, Color.parseColor("#111111")));
-        } else {
-            setBackCircleColor(a.getColor(R.styleable.Croller_back_circle_disable_color, Color.parseColor("#82222222")));
-            setMainCircleColor(a.getColor(R.styleable.Croller_main_circle_disable_color, Color.parseColor("#82000000")));
-            setIndicatorColor(a.getColor(R.styleable.Croller_indicator_disable_color, Color.parseColor("#82FFA036")));
-            setProgressPrimaryColor(a.getColor(R.styleable.Croller_progress_primary_disable_color, Color.parseColor("#82FFA036")));
-            setProgressSecondaryColor(a.getColor(R.styleable.Croller_progress_secondary_disable_color, Color.parseColor("#82111111")));
-        }
+
+        setBackCircleColor(a.getColor(R.styleable.Croller_back_circle_color, backCircleColor));
+        setMainCircleColor(a.getColor(R.styleable.Croller_main_circle_color, mainCircleColor));
+        setIndicatorColor(a.getColor(R.styleable.Croller_indicator_color, indicatorColor));
+        setProgressPrimaryColor(a.getColor(R.styleable.Croller_progress_primary_color, progressPrimaryColor));
+        setProgressSecondaryColor(a.getColor(R.styleable.Croller_progress_secondary_color, progressSecondaryColor));
+
+        setBackCircleDisabledColor(a.getColor(R.styleable.Croller_back_circle_disable_color, backCircleDisabledColor));
+        setMainCircleDisabledColor(a.getColor(R.styleable.Croller_main_circle_disable_color, mainCircleDisabledColor));
+        setIndicatorDisabledColor(a.getColor(R.styleable.Croller_indicator_disable_color, indicatorDisabledColor));
+        setProgressPrimaryDisabledColor(a.getColor(R.styleable.Croller_progress_primary_disable_color, progressPrimaryDisabledColor));
+        setProgressSecondaryDisabledColor(a.getColor(R.styleable.Croller_progress_secondary_disable_color, progressSecondaryDisabledColor));
+
         setLabelSize(a.getDimension(R.styleable.Croller_label_size, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 labelSize, getResources().getDisplayMetrics())));
-        setLabelColor(a.getColor(R.styleable.Croller_label_color, Color.WHITE));
+        setLabelColor(a.getColor(R.styleable.Croller_label_color, labelColor));
+        setlabelDisabledColor(a.getColor(R.styleable.Croller_label_disabled_color, labelDisabledColor));
         setLabelFont(a.getString(R.styleable.Croller_label_font));
         setLabelStyle(a.getInt(R.styleable.Croller_label_style, 0));
         setIndicatorWidth(a.getFloat(R.styleable.Croller_indicator_width, 7));
@@ -253,6 +263,7 @@ public class Croller extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        Log.i(TAG, "onDraw: " + labelFont);
         if (mProgressChangeListener != null)
             mProgressChangeListener.onProgressChanged((int) (deg - 2));
 
@@ -267,16 +278,17 @@ public class Croller extends View {
             startOffset2 = startOffset - 15;
 
             linePaint.setStrokeWidth(indicatorWidth);
-            textPaint.setColor(labelColor);
             textPaint.setTextSize(labelSize);
             if (isEnabled) {
                 circlePaint2.setColor(progressPrimaryColor);
                 circlePaint.setColor(progressSecondaryColor);
                 linePaint.setColor(indicatorColor);
+                textPaint.setColor(labelColor);
             } else {
                 circlePaint2.setColor(progressPrimaryDisabledColor);
                 circlePaint.setColor(progressSecondaryDisabledColor);
                 linePaint.setColor(indicatorDisabledColor);
+                textPaint.setColor(labelDisabledColor);
             }
 
             int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
@@ -307,7 +319,6 @@ public class Croller extends View {
 
                 x = midx + (float) (progressRadius * Math.sin(2 * Math.PI * (1.0 - tmp)));
                 y = midy + (float) (progressRadius * Math.cos(2 * Math.PI * (1.0 - tmp)));
-                circlePaint.setColor(progressSecondaryColor);
                 if (progressSecondaryCircleSize == -1)
                     canvas.drawCircle(x, y, ((float) radius / 30 * ((float) 20 / max) * ((float) sweepAngle / 270)), circlePaint);
                 else
@@ -375,16 +386,17 @@ public class Croller extends View {
             circlePaint2.setStrokeWidth(progressPrimaryStrokeWidth);
             circlePaint2.setStyle(Paint.Style.STROKE);
             linePaint.setStrokeWidth(indicatorWidth);
-            textPaint.setColor(labelColor);
             textPaint.setTextSize(labelSize);
             if (isEnabled) {
                 circlePaint2.setColor(progressPrimaryColor);
                 circlePaint.setColor(progressSecondaryColor);
                 linePaint.setColor(indicatorColor);
+                textPaint.setColor(labelColor);
             } else {
                 circlePaint2.setColor(progressPrimaryDisabledColor);
                 circlePaint.setColor(progressSecondaryDisabledColor);
                 linePaint.setColor(indicatorDisabledColor);
+                textPaint.setColor(labelDisabledColor);
             }
 
             float deg3 = Math.min(deg, max + 2);
@@ -441,9 +453,7 @@ public class Croller extends View {
         }
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            if (mCrollerChangeListener != null) {
-                mCrollerChangeListener.onTap(this);
-            }
+
             float dx = e.getX() - midx;
             float dy = e.getY() - midy;
             downdeg = (float) ((Math.atan2(dy, dx) * 180) / Math.PI);
@@ -604,12 +614,58 @@ public class Croller extends View {
         invalidate();
     }
 
+    public int getBackCircleDisabledColor() {
+        return backCircleDisabledColor;
+    }
+
+    public void setBackCircleDisabledColor(int backCircleDisabledColor) {
+        this.backCircleDisabledColor = backCircleDisabledColor;
+        invalidate();
+    }
+
+    public int getMainCircleDisabledColor() {
+        return mainCircleDisabledColor;
+    }
+
+    public void setMainCircleDisabledColor(int mainCircleDisabledColor) {
+        this.mainCircleDisabledColor = mainCircleDisabledColor;
+        invalidate();
+    }
+
+    public int getIndicatorDisabledColor() {
+        return indicatorDisabledColor;
+    }
+
+    public void setIndicatorDisabledColor(int indicatorDisabledColor) {
+        this.indicatorDisabledColor = indicatorDisabledColor;
+        invalidate();
+    }
+
+    public int getProgressPrimaryDisabledColor() {
+        return progressPrimaryDisabledColor;
+    }
+
+    public void setProgressPrimaryDisabledColor(int progressPrimaryDisabledColor) {
+        this.progressPrimaryDisabledColor = progressPrimaryDisabledColor;
+        invalidate();
+    }
+
+    public int getProgressSecondaryDisabledColor() {
+        return progressSecondaryDisabledColor;
+    }
+
+    public void setProgressSecondaryDisabledColor(int progressSecondaryDisabledColor) {
+        this.progressSecondaryDisabledColor = progressSecondaryDisabledColor;
+        invalidate();
+    }
+
     public float getLabelSize() {
         return labelSize;
     }
 
     public void setLabelSize(float labelSize) {
         this.labelSize = labelSize;
+        Log.i(TAG, "setLabelSize: "+labelSize);
         invalidate();
     }
 
@@ -622,12 +678,24 @@ public class Croller extends View {
         invalidate();
     }
 
+    public int getlabelDisabledColor() {
+        return labelDisabledColor;
+    }
+
+    public void setlabelDisabledColor(int labelDisabledColor) {
+        this.labelDisabledColor = labelDisabledColor;
+        invalidate();
+    }
+
     public String getLabelFont() {
         return labelFont;
     }
 
     public void setLabelFont(String labelFont) {
+        Log.i(TAG, "setLabelFont: " + labelFont);
         this.labelFont = labelFont;
+        if (textPaint != null)
+            generateTypeface();
         invalidate();
     }
 

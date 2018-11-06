@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.crollerTest;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         croller = findViewById(R.id.croller);
         enableSwitch = findViewById(R.id.enableSwitch);
 
-        enableSwitch.setChecked(true);
+        enableSwitch.setChecked(croller.isEnabled());
 
 //        croller.setIndicatorWidth(10);
 //        croller.setBackCircleColor(Color.parseColor("#EDEDED"));
@@ -34,14 +35,11 @@ public class MainActivity extends AppCompatActivity {
 //        croller.setProgressRadius(380);
 //        croller.setBackCircleRadius(300);
 
+
+
         croller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
             @Override
             public void onProgressChanged(Croller croller, int progress) {
-
-            }
-
-            @Override
-            public void onTap(final Croller croller) {
 
             }
 
@@ -59,11 +57,15 @@ public class MainActivity extends AppCompatActivity {
         enableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b)
+                if (b) {
                     croller.setEnabled(true);
-                else
+//                    croller.setLabelFont("fonts/Pattaya-Regular.ttf");
+                } else {
                     croller.setEnabled(false);
+//                    croller.setLabelFont("fonts/sans_bold.ttf");
+                }
             }
         });
+
     }
 }
