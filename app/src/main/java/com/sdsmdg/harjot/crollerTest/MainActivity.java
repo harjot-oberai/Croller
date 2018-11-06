@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.crollerTest;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -10,7 +9,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private Croller croller;
-    private SwitchCompat enableSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         croller = findViewById(R.id.croller);
-        enableSwitch = findViewById(R.id.enableSwitch);
+        SwitchCompat enableSwitch = findViewById(R.id.enableSwitch);
 
         enableSwitch.setChecked(croller.isEnabled());
 
@@ -34,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
 //        croller.setProgressSecondaryColor(Color.parseColor("#EEEEEE"));
 //        croller.setProgressRadius(380);
 //        croller.setBackCircleRadius(300);
-
 
 
         croller.setOnCrollerChangeListener(new OnCrollerChangeListener() {
@@ -59,10 +56,8 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     croller.setEnabled(true);
-//                    croller.setLabelFont("fonts/Pattaya-Regular.ttf");
                 } else {
                     croller.setEnabled(false);
-//                    croller.setLabelFont("fonts/sans_bold.ttf");
                 }
             }
         });

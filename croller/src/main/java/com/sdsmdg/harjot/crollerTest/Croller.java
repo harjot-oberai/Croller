@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.sdsmdg.harjot.crollerTest.utilities.Utils;
 
 public class Croller extends View {
 
-    private static final String TAG = "point";
     private float midx, midy;
     private Paint textPaint, circlePaint, circlePaint2, linePaint;
     private float currdeg = 0, deg = 3, downdeg = 0;
@@ -54,7 +52,7 @@ public class Croller extends View {
     private float indicatorWidth = 7;
 
     private String label = "Label";
-    private String labelFont = "Arial";
+    private String labelFont;
     private int labelStyle = 0;
     private float labelSize = 14;
     private int labelColor = Color.WHITE;
@@ -112,8 +110,6 @@ public class Croller extends View {
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setFakeBoldText(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
-
-        Log.i(TAG, "init: "+labelSize);
         textPaint.setTextSize(labelSize);
 
         generateTypeface();
@@ -130,6 +126,8 @@ public class Croller extends View {
 
         linePaint = new Paint();
         linePaint.setAntiAlias(true);
+        linePaint.setStrokeWidth(indicatorWidth);
+
         if (isEnabled) {
             circlePaint2.setColor(progressPrimaryColor);
             circlePaint.setColor(progressSecondaryColor);
@@ -141,7 +139,6 @@ public class Croller extends View {
             linePaint.setColor(indicatorDisabledColor);
             textPaint.setColor(labelDisabledColor);
         }
-        linePaint.setStrokeWidth(indicatorWidth);
 
         oval = new RectF();
 
@@ -153,22 +150,19 @@ public class Croller extends View {
             AssetManager assetMgr = getContext().getAssets();
             plainLabel = Typeface.createFromAsset(assetMgr, getLabelFont());
         }
-        Typeface boldLabel = Typeface.create(plainLabel, Typeface.BOLD);
-        Typeface italicLabel = Typeface.create(plainLabel, Typeface.ITALIC);
-        Typeface boldItalicLabel = Typeface.create(plainLabel, Typeface.BOLD_ITALIC);
 
         switch (getLabelStyle()) {
             case 0:
                 textPaint.setTypeface(plainLabel);
                 break;
             case 1:
-                textPaint.setTypeface(boldLabel);
+                textPaint.setTypeface(Typeface.create(plainLabel, Typeface.BOLD));
                 break;
             case 2:
-                textPaint.setTypeface(italicLabel);
+                textPaint.setTypeface(Typeface.create(plainLabel, Typeface.ITALIC));
                 break;
             case 3:
-                textPaint.setTypeface(boldItalicLabel);
+                textPaint.setTypeface(Typeface.create(plainLabel, Typeface.BOLD_ITALIC));
                 break;
 
         }
@@ -263,15 +257,26 @@ public class Croller extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Log.i(TAG, "onDraw: " + labelFont);
         if (mProgressChangeListener != null)
             mProgressChangeListener.onProgressChanged((int) (deg - 2));
 
         if (mCrollerChangeListener != null)
             mCrollerChangeListener.onProgressChanged(this, (int) (deg - 2));
 
-        midx = canvas.getWidth() / 2;
-        midy = canvas.getHeight() / 2;
+        midx = getWidth() / 2;
+        midy = getHeight() / 2;
+
+        if (isEnabled) {
+            circlePaint2.setColor(progressPrimaryColor);
+            circlePaint.setColor(progressSecondaryColor);
+            linePaint.setColor(indicatorColor);
+            textPaint.setColor(labelColor);
+        } else {
+            circlePaint2.setColor(progressPrimaryDisabledColor);
+            circlePaint.setColor(progressSecondaryDisabledColor);
+            linePaint.setColor(indicatorDisabledColor);
+            textPaint.setColor(labelDisabledColor);
+        }
 
         if (!isContinuous) {
 
@@ -279,17 +284,6 @@ public class Croller extends View {
 
             linePaint.setStrokeWidth(indicatorWidth);
             textPaint.setTextSize(labelSize);
-            if (isEnabled) {
-                circlePaint2.setColor(progressPrimaryColor);
-                circlePaint.setColor(progressSecondaryColor);
-                linePaint.setColor(indicatorColor);
-                textPaint.setColor(labelColor);
-            } else {
-                circlePaint2.setColor(progressPrimaryDisabledColor);
-                circlePaint.setColor(progressSecondaryDisabledColor);
-                linePaint.setColor(indicatorDisabledColor);
-                textPaint.setColor(labelDisabledColor);
-            }
 
             int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
 
@@ -387,17 +381,6 @@ public class Croller extends View {
             circlePaint2.setStyle(Paint.Style.STROKE);
             linePaint.setStrokeWidth(indicatorWidth);
             textPaint.setTextSize(labelSize);
-            if (isEnabled) {
-                circlePaint2.setColor(progressPrimaryColor);
-                circlePaint.setColor(progressSecondaryColor);
-                linePaint.setColor(indicatorColor);
-                textPaint.setColor(labelColor);
-            } else {
-                circlePaint2.setColor(progressPrimaryDisabledColor);
-                circlePaint.setColor(progressSecondaryDisabledColor);
-                linePaint.setColor(indicatorDisabledColor);
-                textPaint.setColor(labelDisabledColor);
-            }
 
             float deg3 = Math.min(deg, max + 2);
 
@@ -665,7 +648,6 @@ public class Croller extends View {
 
     public void setLabelSize(float labelSize) {
         this.labelSize = labelSize;
-        Log.i(TAG, "setLabelSize: "+labelSize);
         invalidate();
     }
 
@@ -692,7 +674,6 @@ public class Croller extends View {
     }
 
     public void setLabelFont(String labelFont) {
-        Log.i(TAG, "setLabelFont: " + labelFont);
         this.labelFont = labelFont;
         if (textPaint != null)
             generateTypeface();
