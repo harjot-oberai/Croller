@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
 
 ext {
     bintrayRepo = 'Croller'
@@ -24,6 +26,15 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
+
+repositories {
+    mavenCentral()
+    google()
+    jcenter()
+    maven { url "https://jitpack.io" }
+}
+
+group = 'com.github.jitpack'
 version = '1.0.1'
 
 android {
