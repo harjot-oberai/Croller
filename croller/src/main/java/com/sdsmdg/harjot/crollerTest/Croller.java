@@ -63,6 +63,8 @@ public class Croller extends View {
     private int startOffset2 = 0;
     private int sweepAngle = -1;
 
+    private float touchOutsideCircleSensibility = 1f;
+
     private boolean isEnabled = true;
 
     private boolean isAntiClockwise = false;
@@ -207,6 +209,7 @@ public class Croller extends View {
         deg = min + 2;
         setBackCircleRadius(a.getFloat(R.styleable.Croller_back_circle_radius, -1));
         setProgressRadius(a.getFloat(R.styleable.Croller_progress_radius, -1));
+        setTouchOutsideCircleSensibility(a.getFloat(R.styleable.Croller_touch_outsize_circle_sensibility, touchOutsideCircleSensibility));
         setAntiClockwise(a.getBoolean(R.styleable.Croller_anticlockwise, false));
         a.recycle();
     }
@@ -432,7 +435,7 @@ public class Croller extends View {
         if (!isEnabled)
             return false;
 
-        if (Utils.getDistance(e.getX(), e.getY(), midx, midy) > Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))) {
+        if (Utils.getDistance(e.getX(), e.getY(), midx, midy) > getTouchOutsideCircleSensibility() * Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))) {
             if (startEventSent && mCrollerChangeListener != null) {
                 mCrollerChangeListener.onStopTrackingTouch(this);
                 startEventSent = false;
@@ -819,6 +822,14 @@ public class Croller extends View {
     public void setProgressRadius(float progressRadius) {
         this.progressRadius = progressRadius;
         invalidate();
+    }
+
+    public double getTouchOutsideCircleSensibility() {
+        return touchOutsideCircleSensibility;
+    }
+
+    public void setTouchOutsideCircleSensibility(float touchOutsideCircleSensibility) {
+        this.touchOutsideCircleSensibility = touchOutsideCircleSensibility;
     }
 
     public boolean isAntiClockwise() {

@@ -37,6 +37,7 @@
         <attr name="main_circle_radius" format="float" />
         <attr name="back_circle_radius" format="float" />
         <attr name="progress_radius" format="float" />
+        <attr name="touch_outsize_circle_sensibility" format="float" />
         <attr name="anticlockwise" format="boolean" />
     </declare-styleable>
 </resources>
