@@ -18,6 +18,7 @@
         app:indicator_width="10"
         app:is_continuous="false"
         app:label="Label"
+        app:click_to_select="true"
         app:label_color="#000000"
         app:label_disabled_color="#8DFAA091"
         app:label_style="italic"
