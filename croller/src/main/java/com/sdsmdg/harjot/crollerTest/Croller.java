@@ -18,12 +18,13 @@ import com.sdsmdg.harjot.crollerTest.utilities.Utils;
 
 public class Croller extends View {
 
+    private static final int CLICK_ACTION_THRESHOLD = 200;
+
     private float midx, midy;
     private Paint textPaint, circlePaint, circlePaint2, linePaint;
     private float currdeg = 0, deg = 3, downdeg = 0;
 
     private boolean isContinuous = false;
-
     private int backCircleColor = Color.parseColor("#222222");
     private int mainCircleColor = Color.parseColor("#000000");
     private int indicatorColor = Color.parseColor("#FFA036");
@@ -68,6 +69,11 @@ public class Croller extends View {
     private boolean isAntiClockwise = false;
 
     private boolean startEventSent = false;
+
+    private boolean clickToSelect = false;
+
+    private float clickStartX;
+    private float clickStartY;
 
     RectF oval;
 
@@ -208,6 +214,7 @@ public class Croller extends View {
         setBackCircleRadius(a.getFloat(R.styleable.Croller_back_circle_radius, -1));
         setProgressRadius(a.getFloat(R.styleable.Croller_progress_radius, -1));
         setAntiClockwise(a.getBoolean(R.styleable.Croller_anticlockwise, false));
+        setClickToSelect(a.getBoolean(R.styleable.Croller_click_to_select, false));
         a.recycle();
     }
 
@@ -359,7 +366,7 @@ public class Croller extends View {
             else
                 circlePaint.setColor(mainCircleDisabledColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
-            canvas.drawText(label, midx, midy + (float) (radius * 1.1)-textPaint.getFontMetrics().descent, textPaint);
+            canvas.drawText(label, midx, midy + (float) (radius * 1.1) - textPaint.getFontMetrics().descent, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
 
         } else {
@@ -421,7 +428,7 @@ public class Croller extends View {
             else
                 circlePaint.setColor(mainCircleDisabledColor);
             canvas.drawCircle(midx, midy, mainCircleRadius, circlePaint);
-            canvas.drawText(label, midx, midy + (float) (radius * 1.1)-textPaint.getFontMetrics().descent, textPaint);
+            canvas.drawText(label, midx, midy + (float) (radius * 1.1) - textPaint.getFontMetrics().descent, textPaint);
             canvas.drawLine(x1, y1, x2, y2, linePaint);
         }
     }
@@ -441,6 +448,8 @@ public class Croller extends View {
         }
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            clickStartX = e.getX();
+            clickStartY = e.getY();
 
             float dx = e.getX() - midx;
             float dy = e.getY() - midy;
@@ -459,14 +468,7 @@ public class Croller extends View {
             return true;
         }
         if (e.getAction() == MotionEvent.ACTION_MOVE) {
-            float dx = e.getX() - midx;
-            float dy = e.getY() - midy;
-            currdeg = (float) ((Math.atan2(dy, dx) * 180) / Math.PI);
-            currdeg -= 90;
-            if (currdeg < 0) {
-                currdeg += 360;
-            }
-            currdeg = (float) Math.floor((currdeg / 360) * (max + 5));
+            currdeg = computeCurrDeg(e);
 
             if ((currdeg / (max + 4)) > 0.75f && ((downdeg - 0) / (max + 4)) < 0.25f) {
                 if (isAntiClockwise) {
@@ -517,9 +519,32 @@ public class Croller extends View {
                 mCrollerChangeListener.onStopTrackingTouch(this);
                 startEventSent = false;
             }
+
+            if (isClickToSelect() && isAClick(clickStartX, e.getX(), clickStartY, e.getY())) {
+                currdeg = computeCurrDeg(e);
+                deg = currdeg;
+                invalidate();
+            }
             return true;
         }
         return super.onTouchEvent(e);
+    }
+
+    private boolean isAClick(float startX, float endX, float startY, float endY) {
+        float differenceX = Math.abs(startX - endX);
+        float differenceY = Math.abs(startY - endY);
+        return !(differenceX > CLICK_ACTION_THRESHOLD || differenceY > CLICK_ACTION_THRESHOLD);
+    }
+
+    private float computeCurrDeg(MotionEvent e) {
+        float dx = e.getX() - midx;
+        float dy = e.getY() - midy;
+        float currdeg = (float) ((Math.atan2(dy, dx) * 180) / Math.PI);
+        currdeg -= 90;
+        if (currdeg < 0) {
+            currdeg += 360;
+        }
+        return (float) Math.floor((currdeg / 360) * (max + 5));
     }
 
     @Override
@@ -828,5 +853,13 @@ public class Croller extends View {
     public void setAntiClockwise(boolean antiClockwise) {
         isAntiClockwise = antiClockwise;
         invalidate();
+    }
+
+    public boolean isClickToSelect() {
+        return clickToSelect;
+    }
+
+    public void setClickToSelect(boolean clickToSelect) {
+        this.clickToSelect = clickToSelect;
     }
 }
