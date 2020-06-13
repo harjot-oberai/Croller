@@ -23,6 +23,7 @@ public class Croller extends View {
     private float currdeg = 0, deg = 3, downdeg = 0;
 
     private boolean isContinuous = false;
+    private boolean currentlyDown = false;
 
     private int backCircleColor = Color.parseColor("#222222");
     private int mainCircleColor = Color.parseColor("#000000");
@@ -432,7 +433,7 @@ public class Croller extends View {
         if (!isEnabled)
             return false;
 
-        if (Utils.getDistance(e.getX(), e.getY(), midx, midy) > Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))) {
+        if (Utils.getDistance(e.getX(), e.getY(), midx, midy) > Math.max(mainCircleRadius, Math.max(backCircleRadius, progressRadius))&& !currentlyDown) {
             if (startEventSent && mCrollerChangeListener != null) {
                 mCrollerChangeListener.onStopTrackingTouch(this);
                 startEventSent = false;
@@ -441,7 +442,7 @@ public class Croller extends View {
         }
 
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-
+            currentlyDown = true;
             float dx = e.getX() - midx;
             float dy = e.getY() - midy;
             downdeg = (float) ((Math.atan2(dy, dx) * 180) / Math.PI);
@@ -513,6 +514,7 @@ public class Croller extends View {
 
         }
         if (e.getAction() == MotionEvent.ACTION_UP) {
+            currentlyDown = false;
             if (mCrollerChangeListener != null) {
                 mCrollerChangeListener.onStopTrackingTouch(this);
                 startEventSent = false;
